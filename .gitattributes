@@ -4,14 +4,6 @@
 * text=auto
 
 
-
-# Local secrets (never commit)
-Secrets/
-secrets.json
-secrets.*.json
-*.secrets.json
-appsettings.Development.json
-
 ###############################################################################
 # Set default behavior for command prompt diff.
 #
