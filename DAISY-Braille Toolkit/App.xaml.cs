@@ -5,6 +5,6 @@ namespace DAISY_Braille_Toolkit;
 /// <summary>
 /// WPF application entry.
 /// </summary>
-public partial class App : Application
+public partial class App : System.Windows.Application
 {
 }
