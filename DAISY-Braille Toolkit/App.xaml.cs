@@ -1,14 +1,10 @@
-﻿using System.Configuration;
-using System.Data;
 using System.Windows;
 
-namespace DAISY_Braille_Toolkit
-{
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
-    {
-    }
+namespace DAISY_Braille_Toolkit;
 
+/// <summary>
+/// WPF application entry.
+/// </summary>
+public partial class App : Application
+{
 }

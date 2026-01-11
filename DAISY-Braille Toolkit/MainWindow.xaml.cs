@@ -1,75 +1,79 @@
-using System;
 using System.Windows;
-using DAISY_Braille_Toolkit.Services;
+using WinForms = System.Windows.Forms;
 
-namespace DAISY_Braille_Toolkit
+namespace DAISY_Braille_Toolkit;
+
+public partial class MainWindow : Window
 {
-    public partial class MainWindow : Window
+    public MainWindow()
     {
-        private readonly SecretStore _secrets = new();
+        InitializeComponent();
+        RefreshApiKeyStatus();
+    }
 
-        public MainWindow()
+    private void SaveApiKey_Click(object sender, RoutedEventArgs e)
+    {
+        try
         {
-            InitializeComponent();
-            RefreshApiKeyStatus();
-        }
-
-        private void RefreshApiKeyStatus()
-        {
-            // Environment variable always wins (useful for CI/dev)
-            var env = Environment.GetEnvironmentVariable(SecretStore.EnvVarName);
-            if (!string.IsNullOrWhiteSpace(env))
+            var key = ApiKeyBox?.Password?.Trim() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(key))
             {
-                ApiKeyStatusText.Text = "Bruger miljøvariabel (ELEVENLABS_API_KEY).";
+                System.Windows.MessageBox.Show("API key er tom.", "DAISY-Braille Toolkit",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            ApiKeyStatusText.Text = _secrets.HasStoredApiKey()
-                ? "API key gemt lokalt (krypteret)."
-                : "Ingen API key gemt. Indtast og tryk 'Gem lokalt'.";
-        }
+            Services.SecretStore.SaveElevenLabsApiKey(key);
+            RefreshApiKeyStatus();
 
-        private void SaveApiKey_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var key = ApiKeyBox.Password;
-                _secrets.SaveApiKey(key);
-                ApiKeyBox.Clear();
-                RefreshApiKeyStatus();
-                AppendLog("API key gemt lokalt (krypteret).");
-                MessageBox.Show("API key er gemt lokalt (krypteret).", "DAISY-Braille Toolkit",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Kunne ikke gemme API key:\n" + ex.Message, "DAISY-Braille Toolkit",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            System.Windows.MessageBox.Show("API key er gemt lokalt (krypteret).", "DAISY-Braille Toolkit",
+                MessageBoxButton.OK, MessageBoxImage.Information);
         }
+        catch (Exception ex)
+        {
+            System.Windows.MessageBox.Show(ex.Message, "Fejl",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
 
-        private void DeleteApiKey_Click(object sender, RoutedEventArgs e)
+    private void DeleteApiKey_Click(object sender, RoutedEventArgs e)
+    {
+        try
         {
-            try
-            {
-                _secrets.DeleteApiKey();
-                RefreshApiKeyStatus();
-                AppendLog("Lokal API key slettet.");
-                MessageBox.Show("Lokal API key er slettet.", "DAISY-Braille Toolkit",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Kunne ikke slette API key:\n" + ex.Message, "DAISY-Braille Toolkit",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
+            Services.SecretStore.DeleteElevenLabsApiKey();
+            RefreshApiKeyStatus();
 
-        private void AppendLog(string message)
-        {
-            if (LogBox == null) return;
-            LogBox.AppendText($"[{DateTime.Now:HH:mm:ss}] {message}\r\n");
-            LogBox.ScrollToEnd();
+            System.Windows.MessageBox.Show("Lokal API key er slettet.", "DAISY-Braille Toolkit",
+                MessageBoxButton.OK, MessageBoxImage.Information);
         }
+        catch (Exception ex)
+        {
+            System.Windows.MessageBox.Show(ex.Message, "Fejl",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private void RefreshApiKeyStatus()
+    {
+        var hasKey = Services.SecretStore.TryGetElevenLabsApiKey(out _);
+        if (ApiKeyStatusText != null)
+        {
+            ApiKeyStatusText.Text = hasKey
+                ? "API key gemt lokalt (krypteret)"
+                : "Ingen API key gemt (klik Gem lokalt)";
+        }
+    }
+
+    // Optional: folder picker helper you can wire to a button later.
+    private string? PickFolder(string description)
+    {
+        using var dlg = new WinForms.FolderBrowserDialog
+        {
+            Description = description,
+            UseDescriptionForTitle = true,
+            ShowNewFolderButton = true
+        };
+
+        return dlg.ShowDialog() == WinForms.DialogResult.OK ? dlg.SelectedPath : null;
     }
 }

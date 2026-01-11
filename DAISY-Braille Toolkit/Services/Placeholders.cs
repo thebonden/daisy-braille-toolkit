@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Security;
 
 namespace DAISY_Braille_Toolkit.Services;
@@ -18,15 +20,16 @@ public static class DtBookPlaceholder
             .Where(p => p.Length > 0)
             .ToList();
 
-        string E(string s) => SecurityElement.Escape(s) ?? "";
+        static string E(string s) => SecurityElement.Escape(s) ?? "";
 
         var body = string.Join("\n", paras.Select(p => $"      <p>{E(p)}</p>"));
 
-        return $"""<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<dtbook xmlns=\"http://www.daisy.org/z3986/2005/dtbook/\" xml:lang=\"{E(lang)}\">
+        // Klassisk verbatim interpolated string (ingen C# 11 raw strings)
+        return $@"<?xml version=""1.0"" encoding=""UTF-8""?>
+<dtbook xmlns=""http://www.daisy.org/z3986/2005/dtbook/"" xml:lang=""{E(lang)}"">
   <head>
-    <meta name=\"dc:Title\" content=\"{E(title ?? "")}\"/>
-    <meta name=\"dc:Creator\" content=\"{E(author ?? "")}\"/>
+    <meta name=""dc:Title"" content=""{E(title ?? "")}""/>
+    <meta name=""dc:Creator"" content=""{E(author ?? "")}""/>
   </head>
   <book>
     <bodymatter>
@@ -34,7 +37,7 @@ public static class DtBookPlaceholder
     </bodymatter>
   </book>
 </dtbook>
-""";
+";
     }
 }
 
@@ -43,7 +46,7 @@ public static class PefPlaceholder
     public static string Build(string plainText, string? title, string? author)
     {
         // Dette er IKKE rigtig punktskrift-oversættelse. Kun et placeholder PEF dokument.
-        string E(string s) => SecurityElement.Escape(s) ?? "";
+        static string E(string s) => SecurityElement.Escape(s) ?? "";
 
         var lines = (plainText ?? "")
             .Replace("\r\n", "\n")
@@ -53,11 +56,12 @@ public static class PefPlaceholder
 
         var rows = string.Join("\n", lines.Select(l => $"            <row>{E(l)}</row>"));
 
-        return $"""<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<pef xmlns=\"http://www.daisy.org/ns/2008/pef\" version=\"2008-1\">
+        // Klassisk verbatim interpolated string (ingen C# 11 raw strings)
+        return $@"<?xml version=""1.0"" encoding=""UTF-8""?>
+<pef xmlns=""http://www.daisy.org/ns/2008/pef"" version=""2008-1"">
   <head>
-    <meta name=\"dc:Title\" content=\"{E(title ?? "")}\"/>
-    <meta name=\"dc:Creator\" content=\"{E(author ?? "")}\"/>
+    <meta name=""dc:Title"" content=""{E(title ?? "")}""/>
+    <meta name=""dc:Creator"" content=""{E(author ?? "")}""/>
   </head>
   <body>
     <volume>
@@ -72,6 +76,6 @@ public static class PefPlaceholder
     </volume>
   </body>
 </pef>
-""";
+";
     }
 }
