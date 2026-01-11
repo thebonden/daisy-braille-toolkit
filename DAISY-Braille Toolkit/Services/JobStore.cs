@@ -36,7 +36,8 @@ public sealed class JobStore
             InputPath = inputCopy,
             OutputRoot = jobDir,
             Mode = mode,
-            ElevenLabsVoiceId = voiceId
+            ElevenLabsVoiceId = voiceId,
+            Tts = new TtsJobState()
         };
 
         foreach (var step in Enum.GetValues<PipelineStep>())

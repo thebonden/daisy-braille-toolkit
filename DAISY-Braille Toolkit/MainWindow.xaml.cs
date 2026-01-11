@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Controls;
 using Microsoft.Win32;
 using System.Windows.Forms;
 using DAISY_Braille_Toolkit.Models;
@@ -57,7 +58,19 @@ public partial class MainWindow : Window
         var mode = (OutputMode)ModeCombo.SelectedIndex;
         var voiceId = VoiceIdTextBox.Text.Trim();
 
+        // Metadata
+        var title = TitleTextBox.Text.Trim();
+        var author = AuthorTextBox.Text.Trim();
+
         _job = _store.CreateNew(InputPathTextBox.Text, OutputFolderTextBox.Text, mode, voiceId);
+        _job.Title = string.IsNullOrWhiteSpace(title) ? null : title;
+        _job.Author = string.IsNullOrWhiteSpace(author) ? null : author;
+        _job.Tts!.Settings.ModelId = ((ComboBoxItem)ModelCombo.SelectedItem).Content?.ToString() ?? _job.Tts!.Settings.ModelId;
+        _job.Tts!.Settings.OutputFormat = ((ComboBoxItem)FormatCombo.SelectedItem).Content?.ToString() ?? _job.Tts!.Settings.OutputFormat;
+        if (int.TryParse(MaxCharsTextBox.Text.Trim(), out var maxChars) && maxChars > 100)
+            _job.Tts!.Settings.MaxCharsPerSegment = maxChars;
+
+        _store.Save(_job.OutputRoot, _job);
         AppendLog($"Nyt job: {_job.OutputRoot}");
         StatusText.Text = "Nyt job oprettet";
     }
@@ -80,6 +93,16 @@ public partial class MainWindow : Window
         InputPathTextBox.Text = _job.InputPath;
         OutputFolderTextBox.Text = Directory.GetParent(_job.OutputRoot)?.FullName ?? _job.OutputRoot;
         VoiceIdTextBox.Text = _job.ElevenLabsVoiceId;
+        TitleTextBox.Text = _job.Title ?? "";
+        AuthorTextBox.Text = _job.Author ?? "";
+
+        // TTS settings
+        if (_job.Tts is not null)
+        {
+            SelectComboByContent(ModelCombo, _job.Tts.Settings.ModelId);
+            SelectComboByContent(FormatCombo, _job.Tts.Settings.OutputFormat);
+            MaxCharsTextBox.Text = _job.Tts.Settings.MaxCharsPerSegment.ToString();
+        }
         ModeCombo.SelectedIndex = (int)_job.Mode;
     }
 
@@ -93,6 +116,20 @@ public partial class MainWindow : Window
 
         try
         {
+            // Opdater job med UI-valg (så man kan ændre titel/voice/model uden at lave nyt job)
+            _job.Title = string.IsNullOrWhiteSpace(TitleTextBox.Text) ? null : TitleTextBox.Text.Trim();
+            _job.Author = string.IsNullOrWhiteSpace(AuthorTextBox.Text) ? null : AuthorTextBox.Text.Trim();
+            _job.ElevenLabsVoiceId = VoiceIdTextBox.Text.Trim();
+            _job.Tts ??= new TtsJobState();
+            _job.Tts.Settings.ModelId = ((ComboBoxItem)ModelCombo.SelectedItem).Content?.ToString() ?? _job.Tts.Settings.ModelId;
+            _job.Tts.Settings.OutputFormat = ((ComboBoxItem)FormatCombo.SelectedItem).Content?.ToString() ?? _job.Tts.Settings.OutputFormat;
+            if (int.TryParse(MaxCharsTextBox.Text.Trim(), out var maxChars) && maxChars > 100)
+                _job.Tts.Settings.MaxCharsPerSegment = maxChars;
+
+            _store.Save(_job.OutputRoot, _job);
+
+            var apiKey = string.IsNullOrWhiteSpace(ApiKeyBox.Password) ? null : ApiKeyBox.Password;
+
             var forceStart = StartStepCombo.SelectedIndex switch
             {
                 0 => (PipelineStep?)null,                 // Auto resume
@@ -116,13 +153,27 @@ public partial class MainWindow : Window
                         Progress.Value = p * 100;
                         StatusText.Text = msg;
                     });
-                });
+                },
+                elevenLabsApiKey: apiKey);
 
             AppendLog("Færdig ✅");
         }
         catch
         {
             AppendLog("Stoppede pga fejl. Du kan trykke Continue igen (resume).\nSe job.json for detaljer.");
+        }
+    }
+
+    private static void SelectComboByContent(System.Windows.Controls.ComboBox combo, string content)
+    {
+        foreach (var item in combo.Items)
+        {
+            if (item is System.Windows.Controls.ComboBoxItem cbi &&
+                string.Equals(cbi.Content?.ToString(), content, StringComparison.OrdinalIgnoreCase))
+            {
+                combo.SelectedItem = cbi;
+                return;
+            }
         }
     }
 

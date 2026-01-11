@@ -48,6 +48,9 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Output-type:"/>
@@ -66,11 +69,38 @@
                     <ComboBoxItem Content="ISO + CSV"/>
                 </ComboBox>
 
-                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="ElevenLabs Voice ID:"/>
-                <TextBox Grid.Row="1" Grid.Column="1" x:Name="VoiceIdTextBox"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Titel:"/>
+                <TextBox Grid.Row="1" Grid.Column="1" x:Name="TitleTextBox"/>
 
-                <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Text="Job mappe:" Margin="10,0,0,0"/>
-                <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal">
+                <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Text="Forfatter:" Margin="10,0,0,0"/>
+                <TextBox Grid.Row="1" Grid.Column="3" x:Name="AuthorTextBox"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="ElevenLabs Voice ID:"/>
+                <TextBox Grid.Row="2" Grid.Column="1" x:Name="VoiceIdTextBox"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Text="Model:" Margin="10,0,0,0"/>
+                <ComboBox Grid.Row="2" Grid.Column="3" x:Name="ModelCombo" SelectedIndex="0">
+                    <ComboBoxItem Content="eleven_multilingual_v2"/>
+                    <ComboBoxItem Content="eleven_v3"/>
+                </ComboBox>
+
+                <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="ElevenLabs API key:"/>
+                <PasswordBox Grid.Row="3" Grid.Column="1" x:Name="ApiKeyBox"/>
+
+                <TextBlock Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" Text="Output format:" Margin="10,0,0,0"/>
+                <StackPanel Grid.Row="3" Grid.Column="3" Orientation="Horizontal">
+                    <ComboBox x:Name="FormatCombo" Width="170" SelectedIndex="0">
+                        <ComboBoxItem Content="mp3_44100_128"/>
+                        <ComboBoxItem Content="mp3_22050_32"/>
+                        <ComboBoxItem Content="pcm_22050"/>
+                        <ComboBoxItem Content="pcm_48000"/>
+                    </ComboBox>
+                    <TextBlock Text="  Max tegn:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    <TextBox x:Name="MaxCharsTextBox" Width="70" Text="1500"/>
+                </StackPanel>
+
+                <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="Job:"/>
+                <StackPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal">
                     <Button Width="140" Content="Nyt job" Click="NewJob_Click"/>
                     <Button Width="140" Margin="10,0,0,0" Content="Åbn job (resume)..." Click="OpenJob_Click"/>
                 </StackPanel>
