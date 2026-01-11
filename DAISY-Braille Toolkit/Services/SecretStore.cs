@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -6,7 +8,7 @@ namespace DAISY_Braille_Toolkit.Services;
 
 public sealed class SecretStore
 {
-    private const string EnvVarName = "ELEVENLABS_API_KEY";
+    public const string EnvVarName = "ELEVENLABS_API_KEY";
 
     private static string BaseDir =>
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -21,9 +23,9 @@ public sealed class SecretStore
     }
 
     /// <summary>
-    /// Henter API key. Prioritet:
-    /// 1) Miljøvariabel ELEVENLABS_API_KEY
-    /// 2) Lokal krypteret secrets.json (DPAPI, CurrentUser)
+    /// Gets the API key. Priority:
+    /// 1) Environment variable ELEVENLABS_API_KEY
+    /// 2) Local encrypted secrets file (DPAPI, CurrentUser)
     /// </summary>
     public string? GetApiKey()
     {
@@ -34,14 +36,21 @@ public sealed class SecretStore
         if (!File.Exists(SecretsPath))
             return null;
 
-        var json = File.ReadAllText(SecretsPath);
-        var secrets = JsonSerializer.Deserialize<SecretsFile>(json);
-        if (string.IsNullOrWhiteSpace(secrets?.ApiKeyProtectedBase64))
-            return null;
+        try
+        {
+            var json = File.ReadAllText(SecretsPath);
+            var secrets = JsonSerializer.Deserialize<SecretsFile>(json);
+            if (string.IsNullOrWhiteSpace(secrets?.ApiKeyProtectedBase64))
+                return null;
 
-        var protectedBytes = Convert.FromBase64String(secrets.ApiKeyProtectedBase64);
-        var bytes = ProtectedData.Unprotect(protectedBytes, optionalEntropy: null, DataProtectionScope.CurrentUser);
-        return Encoding.UTF8.GetString(bytes);
+            var protectedBytes = Convert.FromBase64String(secrets.ApiKeyProtectedBase64);
+            var bytes = ProtectedData.Unprotect(protectedBytes, optionalEntropy: null, DataProtectionScope.CurrentUser);
+            return Encoding.UTF8.GetString(bytes);
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     public bool HasStoredApiKey()

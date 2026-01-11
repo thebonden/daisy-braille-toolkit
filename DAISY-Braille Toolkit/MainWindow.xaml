@@ -1,116 +1,19 @@
 <Window x:Class="DAISY_Braille_Toolkit.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="DAISY + Braille Toolkit" Height="560" Width="980">
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="DAISY-Braille Toolkit" Height="520" Width="900">
     <Grid Margin="12">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Input -->
-        <GroupBox Header="Input" Grid.Row="0" Padding="10" Margin="0,0,0,10">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <TextBox x:Name="InputPathTextBox" IsReadOnly="True" Margin="0,0,10,0"/>
-                <Button Grid.Column="1" Width="120" Content="Vælg fil..." Click="PickInput_Click"/>
-            </Grid>
-        </GroupBox>
-
-        <!-- Output -->
-        <GroupBox Header="Output" Grid.Row="1" Padding="10" Margin="0,0,0,10">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <TextBox x:Name="OutputFolderTextBox" IsReadOnly="True" Margin="0,0,10,0"/>
-                <Button Grid.Column="1" Width="120" Content="Vælg mappe..." Click="PickOutput_Click"/>
-            </Grid>
-        </GroupBox>
-
-        <!-- Options -->
-        <GroupBox Header="Valg" Grid.Row="2" Padding="10" Margin="0,0,0,10">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="220"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="220"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Output-type:"/>
-                <ComboBox Grid.Row="0" Grid.Column="1" x:Name="ModeCombo" SelectedIndex="2">
-                    <ComboBoxItem Content="Kun DAISY"/>
-                    <ComboBoxItem Content="Kun Punktskrift (PEF)"/>
-                    <ComboBoxItem Content="Begge (DAISY + PEF)"/>
-                </ComboBox>
-
-                <TextBlock Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Text="Start fra step:" Margin="10,0,0,0"/>
-                <ComboBox Grid.Row="0" Grid.Column="3" x:Name="StartStepCombo" SelectedIndex="0">
-                    <ComboBoxItem Content="Auto (resume)"/>
-                    <ComboBoxItem Content="TTS"/>
-                    <ComboBoxItem Content="DAISY build"/>
-                    <ComboBoxItem Content="PEF build"/>
-                    <ComboBoxItem Content="ISO + CSV"/>
-                </ComboBox>
-
-                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Titel:"/>
-                <TextBox Grid.Row="1" Grid.Column="1" x:Name="TitleTextBox"/>
-
-                <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Text="Forfatter:" Margin="10,0,0,0"/>
-                <TextBox Grid.Row="1" Grid.Column="3" x:Name="AuthorTextBox"/>
-
-                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="ElevenLabs Voice ID:"/>
-                <TextBox Grid.Row="2" Grid.Column="1" x:Name="VoiceIdTextBox"/>
-
-                <TextBlock Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Text="Model:" Margin="10,0,0,0"/>
-                <ComboBox Grid.Row="2" Grid.Column="3" x:Name="ModelCombo" SelectedIndex="0">
-                    <ComboBoxItem Content="eleven_multilingual_v2"/>
-                    <ComboBoxItem Content="eleven_v3"/>
-                </ComboBox>
-
-                <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="ElevenLabs API key:"/>
-                <PasswordBox Grid.Row="3" Grid.Column="1" x:Name="ApiKeyBox"/>
-
-                <TextBlock Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" Text="Output format:" Margin="10,0,0,0"/>
-                <StackPanel Grid.Row="3" Grid.Column="3" Orientation="Horizontal">
-                    <ComboBox x:Name="FormatCombo" Width="170" SelectedIndex="0">
-                        <ComboBoxItem Content="mp3_44100_128"/>
-                        <ComboBoxItem Content="mp3_22050_32"/>
-                        <ComboBoxItem Content="pcm_22050"/>
-                        <ComboBoxItem Content="pcm_48000"/>
-                    </ComboBox>
-                    <TextBlock Text="  Max tegn:" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                    <TextBox x:Name="MaxCharsTextBox" Width="70" Text="1500"/>
-                </StackPanel>
-
-                <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="Job:"/>
-                <StackPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal">
-                    <Button Width="140" Content="Nyt job" Click="NewJob_Click"/>
-                    <Button Width="140" Margin="10,0,0,0" Content="Åbn job (resume)..." Click="OpenJob_Click"/>
-                </StackPanel>
-            </Grid>
-        </GroupBox>
-
-
-        <!-- ElevenLabs API -->
-        <GroupBox Header="ElevenLabs API" Grid.Row="3" Padding="10" Margin="0,0,0,10">
+        <!-- ElevenLabs API key (saved locally, encrypted with Windows DPAPI) -->
+        <GroupBox Header="ElevenLabs API" Padding="10" Margin="0,0,0,10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="170"/>
@@ -132,28 +35,17 @@
                         Content="Slet lokalt" Click="DeleteApiKey_Click"/>
 
                 <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Status:"/>
-                <TextBlock Grid.Row="1" Grid.Column="1" x:Name="ApiKeyStatusText" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" x:Name="ApiKeyStatusText" VerticalAlignment="Center" TextWrapping="Wrap"/>
             </Grid>
         </GroupBox>
 
-        <!-- Run + Log -->
-        <Grid Grid.Row="4">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <!-- Placeholder for future modules -->
+        <GroupBox Grid.Row="1" Header="Status" Padding="10" Margin="0,0,0,10">
+            <TextBlock Text="Her kommer konverteringsmoduler (DAISY, PEF, ISO, CSV) senere."/>
+        </GroupBox>
 
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <Button Width="160" Content="Continue / Kør" Click="Run_Click"/>
-                <ProgressBar x:Name="Progress" Height="18" Width="420" Margin="12,2,0,0"/>
-                <TextBlock x:Name="StatusText" Margin="12,0,0,0" VerticalAlignment="Center"/>
-            </StackPanel>
-
-            <TextBox Grid.Row="1" x:Name="LogText"
-                     VerticalScrollBarVisibility="Auto"
-                     HorizontalScrollBarVisibility="Auto"
-                     IsReadOnly="True"
-                     TextWrapping="NoWrap"/>
-        </Grid>
+        <GroupBox Grid.Row="2" Header="Log" Padding="10">
+            <TextBox x:Name="LogBox" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+        </GroupBox>
     </Grid>
 </Window>
