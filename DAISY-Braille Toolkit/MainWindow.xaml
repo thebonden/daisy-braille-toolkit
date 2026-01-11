@@ -7,6 +7,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -107,8 +108,36 @@
             </Grid>
         </GroupBox>
 
+
+        <!-- ElevenLabs API -->
+        <GroupBox Header="ElevenLabs API" Grid.Row="3" Padding="10" Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="170"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="API key:"/>
+                <PasswordBox Grid.Row="0" Grid.Column="1" x:Name="ApiKeyBox" Margin="0,0,10,0"/>
+
+                <Button Grid.Row="0" Grid.Column="2" Width="120" Margin="0,0,10,0"
+                        Content="Gem lokalt" Click="SaveApiKey_Click"/>
+                <Button Grid.Row="0" Grid.Column="3" Width="120"
+                        Content="Slet lokalt" Click="DeleteApiKey_Click"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Status:"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" x:Name="ApiKeyStatusText" VerticalAlignment="Center"/>
+            </Grid>
+        </GroupBox>
+
         <!-- Run + Log -->
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="4">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>

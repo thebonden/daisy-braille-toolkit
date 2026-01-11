@@ -11,12 +11,15 @@ public partial class MainWindow : Window
 {
     private readonly JobStore _store = new();
     private readonly PipelineRunner _runner = new();
+    private readonly SecretStore _secrets = new();
+
 
     private JobManifest? _job;
 
     public MainWindow()
     {
         InitializeComponent();
+        RefreshApiKeyStatus();
         AppendLog("Klar.");
     }
 
@@ -177,7 +180,53 @@ public partial class MainWindow : Window
         }
     }
 
-    private void AppendLog(string line)
+    
+    private void RefreshApiKeyStatus()
+    {
+        // Miljøvariabel vinder altid
+        var env = Environment.GetEnvironmentVariable("ELEVENLABS_API_KEY");
+        if (!string.IsNullOrWhiteSpace(env))
+        {
+            ApiKeyStatusText.Text = "Bruger miljøvariabel (ELEVENLABS_API_KEY).";
+            return;
+        }
+
+        ApiKeyStatusText.Text = _secrets.HasStoredApiKey()
+            ? "API key gemt lokalt (krypteret)."
+            : "Ingen API key gemt. Indtast og tryk 'Gem lokalt'.";
+    }
+
+    private void SaveApiKey_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var key = ApiKeyBox.Password;
+            _secrets.SaveApiKey(key);
+            ApiKeyBox.Clear();
+            RefreshApiKeyStatus();
+            MessageBox.Show("API key er gemt lokalt (krypteret).");
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Kunne ikke gemme API key:\n" + ex.Message);
+        }
+    }
+
+    private void DeleteApiKey_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            _secrets.DeleteApiKey();
+            RefreshApiKeyStatus();
+            MessageBox.Show("Lokal API key er slettet.");
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Kunne ikke slette API key:\n" + ex.Message);
+        }
+    }
+
+private void AppendLog(string line)
     {
         Dispatcher.Invoke(() =>
         {

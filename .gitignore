@@ -10,15 +10,6 @@
 *.userosscache
 *.sln.docstates
 
-# Local secrets (never commit)
-Secrets/
-secrets.json
-secrets.*.json
-*.secrets.json
-appsettings.Development.json
-
-
-
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
