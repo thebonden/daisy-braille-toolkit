@@ -1,0 +1,129 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+  <!-- Menu -->
+  <sys:String x:Key="Menu_File">_File</sys:String>
+  <sys:String x:Key="Menu_File_SelectJobFolder">Select _job folder...</sys:String>
+  <sys:String x:Key="Menu_File_SelectSourceFile">Select _source file...</sys:String>
+  <sys:String x:Key="Menu_File_OpenJobFolder">Open _job folder</sys:String>
+  <sys:String x:Key="Menu_File_Exit">E_xit</sys:String>
+
+  <sys:String x:Key="Menu_Tools">_Tools</sys:String>
+  <sys:String x:Key="Menu_Tools_RefreshVoices">Refresh _voices</sys:String>
+  <sys:String x:Key="Menu_Tools_CopyLog">Copy _log</sys:String>
+  <sys:String x:Key="Menu_Tools_ClearLog">Clear _log</sys:String>
+
+  <sys:String x:Key="Menu_Language">_Language</sys:String>
+  <sys:String x:Key="Menu_Language_English">English</sys:String>
+  <sys:String x:Key="Menu_Language_Danish">Dansk</sys:String>
+
+  <sys:String x:Key="Menu_Help">_Help</sys:String>
+  <sys:String x:Key="Menu_Help_About">_About...</sys:String>
+
+  <!-- Header -->
+  <sys:String x:Key="Header_Subtitle">Make documents accessible: DAISY + TTS + PEF</sys:String>
+
+  <!-- Tabs -->
+  <sys:String x:Key="Tab_RunJob">Run job</sys:String>
+  <sys:String x:Key="Tab_TTS">TTS</sys:String>
+  <sys:String x:Key="Tab_Voices">Voices</sys:String>
+  <sys:String x:Key="Tab_Settings">Settings</sys:String>
+  <sys:String x:Key="Tab_Log">Log</sys:String>
+
+  <!-- Group headers -->
+  <sys:String x:Key="Gb_RunPipeline">Run (resume + cache) – coming next</sys:String>
+  <sys:String x:Key="Gb_JobSelection">Job selection (also used by the TTS editor)</sys:String>
+  <sys:String x:Key="Gb_TtsEditor">TTS Editor (separate text track: Source ≠ TTS)</sys:String>
+  <sys:String x:Key="Gb_VoiceSelection">Voice selection + Preview</sys:String>
+  <sys:String x:Key="Gb_ElevenLabsApi">ElevenLabs API</sys:String>
+  <sys:String x:Key="Gb_Notes">Notes</sys:String>
+
+  <!-- Labels -->
+  <sys:String x:Key="Lbl_JobFolder">Job folder:</sys:String>
+  <sys:String x:Key="Lbl_SourceFile">Source (txt):</sys:String>
+
+  <sys:String x:Key="Lbl_DefaultModel">Default model:</sys:String>
+  <sys:String x:Key="Lbl_LanguageFilter">Language filter:</sys:String>
+  <sys:String x:Key="Lbl_DefaultVoice">Default voice:</sys:String>
+  <sys:String x:Key="Lbl_VoiceDetails">Voice details:</sys:String>
+  <sys:String x:Key="Lbl_VoiceList">Voice list:</sys:String>
+  <sys:String x:Key="Lbl_Preview">Preview:</sys:String>
+  <sys:String x:Key="Lbl_Cleanup">Cleanup:</sys:String>
+
+  <sys:String x:Key="Lbl_ApiKey">API key:</sys:String>
+  <sys:String x:Key="Lbl_Status">Status:</sys:String>
+
+  <!-- Buttons -->
+  <sys:String x:Key="Btn_SelectFolder">Select folder</sys:String>
+  <sys:String x:Key="Btn_SelectFile">Select file</sys:String>
+
+  <sys:String x:Key="Btn_UpdateVoiceList">Refresh voices</sys:String>
+  <sys:String x:Key="Btn_PlayPreview">Play preview</sys:String>
+  <sys:String x:Key="Btn_Stop">Stop</sys:String>
+  <sys:String x:Key="Btn_SaveSettings">Save settings</sys:String>
+
+  <sys:String x:Key="Btn_SaveApiKey">Save locally</sys:String>
+  <sys:String x:Key="Btn_DeleteApiKey">Delete locally</sys:String>
+
+  <sys:String x:Key="Btn_CopyLog">Copy log</sys:String>
+  <sys:String x:Key="Btn_ClearLog">Clear log</sys:String>
+
+  <sys:String x:Key="Btn_BuildSegments">Build segments</sys:String>
+  <sys:String x:Key="Btn_CopySelected">Copy Source → TTS (selected)</sys:String>
+  <sys:String x:Key="Btn_CopyAll">Copy Source → TTS (all)</sys:String>
+  <sys:String x:Key="Btn_SaveSelected">Save TTS (selected)</sys:String>
+  <sys:String x:Key="Btn_SaveAll">Save TTS (all)</sys:String>
+  <sys:String x:Key="Btn_DanishFixes">Danish fixes (TTS)</sys:String>
+
+  <!-- Misc text -->
+  <sys:String x:Key="Txt_RunPipeline_Next">Next: a job flow that can resume after errors and avoid paying twice (skip TTS if audio already exists).</sys:String>
+
+  <sys:String x:Key="Lbl_Segments">Segments</sys:String>
+  <sys:String x:Key="Lbl_Source">Source (DAISY/PEF)</sys:String>
+  <sys:String x:Key="Lbl_Tts">TTS (audio only) – you can add tags</sys:String>
+  <sys:String x:Key="Lbl_InsertTags">Insert tags:</sys:String>
+
+  <sys:String x:Key="Txt_Tip_SegmentsUsesJob">Tip: Segmenting uses the Job folder + Source file from the “Run job” tab. You can also change them via the “File” menu.</sys:String>
+
+  <sys:String x:Key="Txt_Voices_Explain">Here you choose the default voice/model. Preview uses the voice preview_url and costs no credits.</sys:String>
+  <sys:String x:Key="Txt_Notes_Api">The API key is stored locally and encrypted. Voice sync requires the key, but preview playback itself only uses preview_url.</sys:String>
+
+  <sys:String x:Key="Chk_Cleanup">Delete temporary files when the job is finished</sys:String>
+
+  <sys:String x:Key="Title_Info">Info</sys:String>
+  <sys:String x:Key="Title_Error">Error</sys:String>
+
+  <!-- MessageBox strings -->
+  <sys:String x:Key="About_Title">About</sys:String>
+  <sys:String x:Key="About_Text">DAISY-Braille Toolkit
+
+Open-source tool to create accessible documents:
+DAISY + TTS + PEF</sys:String>
+
+  <sys:String x:Key="Msg_LogEmpty">The log is empty.</sys:String>
+  <sys:String x:Key="Msg_SelectValidJobFolder">Select a valid job folder first.</sys:String>
+  <sys:String x:Key="Msg_CouldNotOpenFolder">Could not open the folder.</sys:String>
+  <sys:String x:Key="Msg_CouldNotCopyLog">Could not copy the log.</sys:String>
+
+    <!-- Production data -->
+    <sys:String x:Key="Tab_ProductionData">Production data</sys:String>
+    <sys:String x:Key="Gb_ProductionData">Production data (CSV)</sys:String>
+    <sys:String x:Key="Prod_CsvFile">Target CSV file:</sys:String>
+    <sys:String x:Key="Prod_Help">Add one or more rows, then export to a CSV file. Use “Add from current job” to pre-fill model/voice and paths from the UI.</sys:String>
+    <sys:String x:Key="Btn_ExportCsv">Export CSV</sys:String>
+    <sys:String x:Key="Btn_AddFromCurrentJob">Add from current job</sys:String>
+    <sys:String x:Key="Btn_RemoveSelected">Remove selected</sys:String>
+    <sys:String x:Key="Btn_CopySelectedRow">Copy selected row</sys:String>
+    <sys:String x:Key="Btn_OpenFolder">Open folder</sys:String>
+
+    <sys:String x:Key="Prod_Col_Date">Date</sys:String>
+    <sys:String x:Key="Prod_Col_Title">Title</sys:String>
+    <sys:String x:Key="Prod_Col_Language">Language</sys:String>
+    <sys:String x:Key="Prod_Col_Model">Model</sys:String>
+    <sys:String x:Key="Prod_Col_Voice">Voice</sys:String>
+    <sys:String x:Key="Prod_Col_VoiceId">Voice ID</sys:String>
+    <sys:String x:Key="Prod_Col_Source">Source file</sys:String>
+    <sys:String x:Key="Prod_Col_JobFolder">Job folder</sys:String>
+    <sys:String x:Key="Prod_Col_Notes">Notes</sys:String>
+</ResourceDictionary>

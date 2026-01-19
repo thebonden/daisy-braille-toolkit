@@ -1,0 +1,130 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+  <!-- Menu -->
+  <sys:String x:Key="Menu_File">_Fil</sys:String>
+  <sys:String x:Key="Menu_File_SelectJobFolder">Vælg _job-mappe...</sys:String>
+  <sys:String x:Key="Menu_File_SelectSourceFile">Vælg _kilde-fil...</sys:String>
+  <sys:String x:Key="Menu_File_OpenJobFolder">Åbn _job-mappe</sys:String>
+  <sys:String x:Key="Menu_File_Exit">_Afslut</sys:String>
+
+  <sys:String x:Key="Menu_Tools">_Værktøjer</sys:String>
+  <sys:String x:Key="Menu_Tools_RefreshVoices">Opdater _stemmer</sys:String>
+  <sys:String x:Key="Menu_Tools_CopyLog">Kopiér _log</sys:String>
+  <sys:String x:Key="Menu_Tools_ClearLog">Ryd _log</sys:String>
+
+  <sys:String x:Key="Menu_Language">_Sprog</sys:String>
+  <sys:String x:Key="Menu_Language_English">English</sys:String>
+  <sys:String x:Key="Menu_Language_Danish">Dansk</sys:String>
+
+  <sys:String x:Key="Menu_Help">_Hjælp</sys:String>
+  <sys:String x:Key="Menu_Help_About">_Om...</sys:String>
+
+  <!-- Header -->
+  <sys:String x:Key="Header_Subtitle">Gør dokumenter tilgængelige: DAISY + TTS + PEF</sys:String>
+
+  <!-- Tabs -->
+  <sys:String x:Key="Tab_RunJob">Kør job</sys:String>
+  <sys:String x:Key="Tab_TTS">TTS</sys:String>
+  <sys:String x:Key="Tab_Voices">Stemmer</sys:String>
+  <sys:String x:Key="Tab_Settings">Indstillinger</sys:String>
+  <sys:String x:Key="Tab_Log">Log</sys:String>
+
+  <!-- Group headers -->
+  <sys:String x:Key="Gb_RunPipeline">Kørsel (resume + cache) – kommer næste</sys:String>
+  <sys:String x:Key="Gb_JobSelection">Job-valg (bruges også i TTS editor)</sys:String>
+  <sys:String x:Key="Gb_TtsEditor">TTS Editor (separat tekstspor: Source ≠ TTS)</sys:String>
+  <sys:String x:Key="Gb_VoiceSelection">Stemmevalg + Preview</sys:String>
+  <sys:String x:Key="Gb_ElevenLabsApi">ElevenLabs API</sys:String>
+  <sys:String x:Key="Gb_Notes">Noter</sys:String>
+
+  <!-- Labels -->
+  <sys:String x:Key="Lbl_JobFolder">Job-mappe:</sys:String>
+  <sys:String x:Key="Lbl_SourceFile">Kilde (txt):</sys:String>
+
+  <sys:String x:Key="Lbl_DefaultModel">Standard model:</sys:String>
+  <sys:String x:Key="Lbl_LanguageFilter">Sprog-filter:</sys:String>
+  <sys:String x:Key="Lbl_DefaultVoice">Standard stemme:</sys:String>
+  <sys:String x:Key="Lbl_VoiceDetails">Stemme-detaljer:</sys:String>
+  <sys:String x:Key="Lbl_VoiceList">Stemmeliste:</sys:String>
+  <sys:String x:Key="Lbl_Preview">Preview:</sys:String>
+  <sys:String x:Key="Lbl_Cleanup">Oprydning:</sys:String>
+
+  <sys:String x:Key="Lbl_ApiKey">API key:</sys:String>
+  <sys:String x:Key="Lbl_Status">Status:</sys:String>
+
+  <!-- Buttons -->
+  <sys:String x:Key="Btn_SelectFolder">Vælg mappe</sys:String>
+  <sys:String x:Key="Btn_SelectFile">Vælg fil</sys:String>
+
+  <sys:String x:Key="Btn_UpdateVoiceList">Opdater stemmer</sys:String>
+  <sys:String x:Key="Btn_PlayPreview">Afspil preview</sys:String>
+  <sys:String x:Key="Btn_Stop">Stop</sys:String>
+  <sys:String x:Key="Btn_SaveSettings">Gem indstillinger</sys:String>
+
+  <sys:String x:Key="Btn_SaveApiKey">Gem lokalt</sys:String>
+  <sys:String x:Key="Btn_DeleteApiKey">Slet lokalt</sys:String>
+
+  <sys:String x:Key="Btn_CopyLog">Kopiér log</sys:String>
+  <sys:String x:Key="Btn_ClearLog">Ryd log</sys:String>
+
+  <sys:String x:Key="Btn_BuildSegments">Byg segmenter</sys:String>
+  <sys:String x:Key="Btn_CopySelected">Kopiér Source → TTS (valgt)</sys:String>
+  <sys:String x:Key="Btn_CopyAll">Kopiér Source → TTS (alle)</sys:String>
+  <sys:String x:Key="Btn_SaveSelected">Gem TTS (valgt)</sys:String>
+  <sys:String x:Key="Btn_SaveAll">Gem TTS (alle)</sys:String>
+  <sys:String x:Key="Btn_DanishFixes">Dansk-fixes (TTS)</sys:String>
+
+  <!-- Misc text -->
+  <sys:String x:Key="Txt_RunPipeline_Next">Næste del: job-flow der kan fortsætte efter fejl og undgå at betale igen (spring TTS over hvis audio findes).</sys:String>
+
+  <sys:String x:Key="Lbl_Segments">Segmenter</sys:String>
+  <sys:String x:Key="Lbl_Source">Source (DAISY/PEF)</sys:String>
+  <sys:String x:Key="Lbl_Tts">TTS (kun lyd) – du kan tilføje tags</sys:String>
+  <sys:String x:Key="Lbl_InsertTags">Indsæt tags:</sys:String>
+
+  <sys:String x:Key="Txt_Tip_SegmentsUsesJob">Tip: Segmenter bruger Job-mappe + Kilde-fil fra fanen “Kør job”. Du kan også ændre dem via menuen “Fil”.</sys:String>
+
+  <sys:String x:Key="Txt_Voices_Explain">Her vælger du standard voice/model. Preview bruger voice preview_url og koster ingen credits.</sys:String>
+  <sys:String x:Key="Txt_Notes_Api">API key gemmes lokalt krypteret. Stemme-synk kræver key, men preview-afspilning i sig selv bruger kun preview_url.</sys:String>
+
+  <sys:String x:Key="Chk_Cleanup">Slet midlertidige filer når job er færdig</sys:String>
+
+  <sys:String x:Key="Title_Info">Info</sys:String>
+  <sys:String x:Key="Title_Error">Fejl</sys:String>
+
+  <!-- MessageBox strings -->
+  <sys:String x:Key="About_Title">Om</sys:String>
+  <sys:String x:Key="About_Text">DAISY-Braille Toolkit
+
+Open source værktøj til at lave tilgængelige dokumenter:
+DAISY + TTS + PEF</sys:String>
+
+  <sys:String x:Key="Msg_LogEmpty">Loggen er tom.</sys:String>
+  <sys:String x:Key="Msg_SelectValidJobFolder">Vælg en gyldig job-mappe først.</sys:String>
+  <sys:String x:Key="Msg_CouldNotOpenFolder">Kunne ikke åbne mappen.</sys:String>
+  <sys:String x:Key="Msg_CouldNotCopyLog">Kunne ikke kopiere log.</sys:String>
+
+    <!-- Production data -->
+    <sys:String x:Key="Tab_ProductionData">Produktionsdata</sys:String>
+    <sys:String x:Key="Gb_ProductionData">Produktionsdata (CSV)</sys:String>
+    <sys:String x:Key="Prod_CsvFile">Mål-CSV-fil:</sys:String>
+    <sys:String x:Key="Prod_Help">Tilføj en eller flere rækker, og eksportér til en CSV-fil. Brug “Tilføj fra nuværende job” for at udfylde model/stemme og stier fra UI’et.</sys:String>
+
+    <sys:String x:Key="Btn_ExportCsv">Eksportér CSV (tilføj)</sys:String>
+    <sys:String x:Key="Btn_AddFromCurrentJob">Tilføj fra nuværende job</sys:String>
+    <sys:String x:Key="Btn_RemoveSelected">Fjern valgt</sys:String>
+    <sys:String x:Key="Btn_CopySelectedRow">Kopiér valgt</sys:String>
+    <sys:String x:Key="Btn_OpenFolder">Åbn mappe</sys:String>
+
+    <sys:String x:Key="Prod_Col_Date">Dato/tid</sys:String>
+    <sys:String x:Key="Prod_Col_Title">Titel</sys:String>
+    <sys:String x:Key="Prod_Col_Language">Sprog</sys:String>
+    <sys:String x:Key="Prod_Col_Model">Model</sys:String>
+    <sys:String x:Key="Prod_Col_Voice">Stemme</sys:String>
+    <sys:String x:Key="Prod_Col_VoiceId">Stemme-ID</sys:String>
+    <sys:String x:Key="Prod_Col_Source">Kilde</sys:String>
+    <sys:String x:Key="Prod_Col_JobFolder">Job-mappe</sys:String>
+    <sys:String x:Key="Prod_Col_Notes">Noter</sys:String>
+</ResourceDictionary>
