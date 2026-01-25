@@ -41,9 +41,10 @@
 
   <!-- Optional folders: if you add files here, they will be copied to output/publish automatically -->
   <ItemGroup>
-    <Content Include="Tools\\**\\*" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="Scripts\\**\\*" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="Data\\**\\*" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Tools\**\*" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="Scripts\**\*" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="Data\**\*" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="Provisioning\**\*" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

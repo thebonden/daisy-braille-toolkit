@@ -1,0 +1,46 @@
+Data der skal i CSV filen
+Lengte
+Stemme
+Sprog
+Pruduceret for (list på faste opgaver + intast som mulighed)
+Titel (intast titel)
+Dato for Intale
+Tid for intale
+Pruduceret af (list , fx Danskblindesamfund , med flere)
+Daisy vertion
+orginaldokomenter navne+format (kjfdsklfgh.txt)(liste med sepration ";")
+Afsender (liste + intast)
+
+Volume label (DBS_(Dato=130125_fordløbne tal på 00000)exempel DBS_241225_00001
+Write data (isofil navnet)exempel test.iso
+
+
+
+nogle af data kan finde i master.smil og eller skal de også der ind
+
+
+    <meta name="dc:title" content="" />
+    <meta name="dc:format" content="" />
+    <meta name="dc:identifier" content="" />
+    <meta name="ncc:totalElapsedTime" content="" />
+    <meta name="ncc:timeInThisSmil" content="" />
+    <meta name="ncc:generator" content="" />
+
+
+alle data skrives (en database eller sherpoint eller på anden måde så man kan se fordløbne nr kan slåes op så det aldri er det samme nr og man kan slå op i file for at se hvilken prodution det er)
+
+prudoceret for liste
+
+Solgavevalby
+Dansk blindesamfund
+
+
+Pruduceret af liste
+Dansk Blindesamfund
+
+
+Afsender liste
+Dansk Blindesamfund
+Blekinge Boulevard 2
+2630 Taastrup
+

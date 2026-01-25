@@ -12,6 +12,45 @@ public sealed class JobStore
 
     public static string ManifestPath(string jobDir) => Path.Combine(jobDir, "job.json");
 
+    /// <summary>
+    /// Create a job manifest inside an existing directory (the directory becomes the job's OutputRoot).
+    /// This matches the GUI workflow where the user selects a per-book job folder.
+    /// </summary>
+    public JobManifest CreateInFolder(string jobDir, string inputPath, OutputMode mode, string voiceId)
+    {
+        Directory.CreateDirectory(jobDir);
+
+        // Output under-mapper
+        Directory.CreateDirectory(Path.Combine(jobDir, "input"));
+        Directory.CreateDirectory(Path.Combine(jobDir, "dtbook"));
+        Directory.CreateDirectory(Path.Combine(jobDir, "tts"));
+        Directory.CreateDirectory(Path.Combine(jobDir, "daisy"));
+        Directory.CreateDirectory(Path.Combine(jobDir, "braille"));
+        Directory.CreateDirectory(Path.Combine(jobDir, "iso"));
+        Directory.CreateDirectory(Path.Combine(jobDir, "metadata"));
+        Directory.CreateDirectory(Path.Combine(jobDir, "logs"));
+
+        // Copy input (so the job is reproducible)
+        var inputCopy = Path.Combine(jobDir, "input", Path.GetFileName(inputPath));
+        File.Copy(inputPath, inputCopy, overwrite: true);
+
+        var manifest = new JobManifest
+        {
+            InputPath = inputCopy,
+            OutputRoot = jobDir,
+            Mode = mode,
+            ElevenLabsVoiceId = voiceId,
+            Tts = new TtsJobState()
+        };
+
+        foreach (var step in Enum.GetValues<PipelineStep>())
+            manifest.Steps[step] = new StepState();
+
+        Save(jobDir, manifest);
+        return manifest;
+    }
+
+
     public JobManifest CreateNew(string inputPath, string outputRoot, OutputMode mode, string voiceId)
     {
         var jobDir = Path.Combine(outputRoot, $"Job_{DateTime.Now:yyyy-MM-dd_HHmmss}");

@@ -14,6 +14,14 @@
   <sys:String x:Key="Menu_Tools_CopyLog">Kopiér _log</sys:String>
   <sys:String x:Key="Menu_Tools_ClearLog">Ryd _log</sys:String>
 
+  <sys:String x:Key="Menu_View">_Vis</sys:String>
+  <sys:String x:Key="View_RunJob">Kør job</sys:String>
+  <sys:String x:Key="View_TTS">TTS editor</sys:String>
+  <sys:String x:Key="View_Voices">Stemmer</sys:String>
+  <sys:String x:Key="View_Settings">Indstillinger</sys:String>
+  <sys:String x:Key="View_ProductionData">Produktionsdata</sys:String>
+  <sys:String x:Key="View_Log">Log</sys:String>
+
   <sys:String x:Key="Menu_Language">_Sprog</sys:String>
   <sys:String x:Key="Menu_Language_English">English</sys:String>
   <sys:String x:Key="Menu_Language_Danish">Dansk</sys:String>
@@ -37,11 +45,16 @@
   <sys:String x:Key="Gb_TtsEditor">TTS Editor (separat tekstspor: Source ≠ TTS)</sys:String>
   <sys:String x:Key="Gb_VoiceSelection">Stemmevalg + Preview</sys:String>
   <sys:String x:Key="Gb_ElevenLabsApi">ElevenLabs API</sys:String>
+  <sys:String x:Key="Gb_SharePointProvisioning">SharePoint opsætning</sys:String>
+  <sys:String x:Key="Lbl_SharePointSetupPath">Provisioning-mappe:</sys:String>
+  <sys:String x:Key="Btn_OpenSharePointSetup">Åbn mappe</sys:String>
+  <sys:String x:Key="Txt_SharePointSetupHelp">Kør Install-DBTSharePoint.ps1 i denne mappe for at oprette de nødvendige SharePoint-lister (engangs-opsætning).</sys:String>
+
   <sys:String x:Key="Gb_Notes">Noter</sys:String>
 
   <!-- Labels -->
   <sys:String x:Key="Lbl_JobFolder">Job-mappe:</sys:String>
-  <sys:String x:Key="Lbl_SourceFile">Kilde (txt):</sys:String>
+  <sys:String x:Key="Lbl_SourceFile">Kilde (txt/docx):</sys:String>
 
   <sys:String x:Key="Lbl_DefaultModel">Standard model:</sys:String>
   <sys:String x:Key="Lbl_LanguageFilter">Sprog-filter:</sys:String>
@@ -127,4 +140,10 @@ DAISY + TTS + PEF</sys:String>
     <sys:String x:Key="Prod_Col_Source">Kilde</sys:String>
     <sys:String x:Key="Prod_Col_JobFolder">Job-mappe</sys:String>
     <sys:String x:Key="Prod_Col_Notes">Noter</sys:String>
+    <sys:String x:Key="Lbl_OutputMode">Output-mode:</sys:String>
+    <sys:String x:Key="Btn_RunJob">Kør job</sys:String>
+    <sys:String x:Key="Btn_CancelJob">Annuller</sys:String>
+    <sys:String x:Key="Mode_Both">DAISY + Braille</sys:String>
+    <sys:String x:Key="Mode_DaisyOnly">Kun DAISY</sys:String>
+    <sys:String x:Key="Mode_BrailleOnly">Kun Braille (PEF)</sys:String>
 </ResourceDictionary>

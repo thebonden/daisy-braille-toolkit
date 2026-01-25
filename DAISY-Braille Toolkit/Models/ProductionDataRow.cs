@@ -1,45 +1,54 @@
-using System;
-using System.Globalization;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace DAISY_Braille_Toolkit.Models
 {
-    public class ProductionDataRow
+    /// <summary>
+    /// A flexible row for Production CSV output.
+    /// Column names are loaded from Data/metadata daisy.txt and accessed via the string indexer.
+    /// </summary>
+    public sealed class ProductionDataRow : INotifyPropertyChanged
     {
-        public string Timestamp { get; set; } = DateTimeOffset.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-        public string Title { get; set; } = "";
-        public string Language { get; set; } = "";
-        public string ModelId { get; set; } = "";
-        public string VoiceName { get; set; } = "";
-        public string VoiceId { get; set; } = "";
-        public string SourceFile { get; set; } = "";
-        public string JobFolder { get; set; } = "";
-        public string Notes { get; set; } = "";
+        private readonly Dictionary<string, string> _fields = new(StringComparer.OrdinalIgnoreCase);
 
-        public static string CsvHeader => "Timestamp,Title,Language,ModelId,VoiceName,VoiceId,SourceFile,JobFolder,Notes";
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        public string ToCsvRow()
+        /// <summary>
+        /// Default indexer: allows WPF binding with Binding Path=["Column Name"].
+        /// </summary>
+        public string this[string key]
         {
-            return string.Join(",",
-                Escape(Timestamp),
-                Escape(Title),
-                Escape(Language),
-                Escape(ModelId),
-                Escape(VoiceName),
-                Escape(VoiceId),
-                Escape(SourceFile),
-                Escape(JobFolder),
-                Escape(Notes));
-        }
-
-        private static string Escape(string? value)
-        {
-            value ??= string.Empty;
-            var needsQuotes = value.Contains(',') || value.Contains('"') || value.Contains('\n') || value.Contains('\r');
-            if (value.Contains('"'))
+            get
             {
-                value = value.Replace("\"", "\"\"");
+                key ??= string.Empty;
+                return _fields.TryGetValue(key, out var v) ? v ?? string.Empty : string.Empty;
             }
-            return needsQuotes ? $"\"{value}\"" : value;
+            set
+            {
+                key ??= string.Empty;
+                _fields[key] = value ?? string.Empty;
+                OnPropertyChanged("Item[]");
+            }
         }
+
+        public IReadOnlyDictionary<string, string> Fields => _fields;
+
+        public static string CsvHeader(IReadOnlyList<string> columns)
+            => string.Join(",", columns.Select(EscapeCsv));
+
+        public string ToCsvRow(IReadOnlyList<string> columns)
+            => string.Join(",", columns.Select(c => EscapeCsv(this[c])));
+
+        private static string EscapeCsv(string? s)
+        {
+            s ??= string.Empty;
+            if (s.Contains('"')) s = s.Replace("\"", "\"\"");
+            if (s.Contains(',') || s.Contains('\n') || s.Contains('\r') || s.Contains('"'))
+                return "\"" + s + "\"";
+            return s;
+        }
+
+        private void OnPropertyChanged([CallerMemberName] string? name = null)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name ?? string.Empty));
     }
 }

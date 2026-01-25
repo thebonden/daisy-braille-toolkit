@@ -45,15 +45,17 @@ namespace DAISY_Braille_Toolkit
         {
             try
             {
-                var en = FindName("EnglishMenuItem") as MenuItem;
-                var da = FindName("DanishMenuItem") as MenuItem;
+                // Use the actual x:Name values from MainWindow.xaml
+                if (LangEnglishMenu != null) LangEnglishMenu.IsChecked = LanguageManager.CurrentLanguage == "en";
+                if (LangDanishMenu != null) LangDanishMenu.IsChecked = LanguageManager.CurrentLanguage == "da";
 
-                if (en != null) en.IsChecked = LanguageManager.CurrentLanguage == "en";
-                if (da != null) da.IsChecked = LanguageManager.CurrentLanguage == "da";
+                // Some UI (like the output mode combo) contains localized labels.
+                // Rebuild it when the language changes.
+                InitOutputModeCombo();
             }
             catch
             {
-                // Menu items not available yet (e.g., if called too early)
+                // Ignore UI timing errors
             }
         }
     }

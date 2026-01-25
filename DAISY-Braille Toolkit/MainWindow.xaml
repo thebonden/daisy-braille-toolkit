@@ -1,9 +1,26 @@
-<Window x:Class="DAISY_Braille_Toolkit.MainWindow"
+<Window x:Name="RootWindow" x:Class="DAISY_Braille_Toolkit.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="DAISY-Braille Toolkit" Height="880" Width="1240"
         Icon="Assets/DaisyBrailleToolkit.ico"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded"
+        PreviewKeyDown="RootWindow_PreviewKeyDown">
+
+    <Window.Resources>
+        <!-- Keep the existing TabControl layout, but hide the tab strip.
+             Navigation happens via the drop-down "View" menu instead. -->
+        <Style x:Key="TabControl_NoTabStrip" TargetType="{x:Type TabControl}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabControl}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter ContentSource="SelectedContent"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <DockPanel Margin="0">
 
         <!-- Top menu -->
@@ -15,6 +32,17 @@
                 <MenuItem Header="{DynamicResource Menu_File_OpenJobFolder}" Click="OpenJobFolder_Click"/>
                 <Separator/>
                 <MenuItem Header="{DynamicResource Menu_File_Exit}" Click="Exit_Click"/>
+            </MenuItem>
+
+            <!-- Navigation (instead of main tabs) -->
+            <MenuItem Header="{DynamicResource Menu_View}">
+                <MenuItem Header="{DynamicResource View_RunJob}" Click="Go_RunJob_Click" InputGestureText="Ctrl+1"/>
+                <MenuItem Header="{DynamicResource View_TTS}" Click="Go_Tts_Click" InputGestureText="Ctrl+2"/>
+                <MenuItem Header="{DynamicResource View_Voices}" Click="Go_Voices_Click" InputGestureText="Ctrl+3"/>
+                <MenuItem Header="{DynamicResource View_Settings}" Click="Go_Settings_Click" InputGestureText="Ctrl+4"/>
+                <MenuItem Header="{DynamicResource View_ProductionData}" Click="Go_ProductionData_Click" InputGestureText="Ctrl+5"/>
+                <Separator/>
+                <MenuItem Header="{DynamicResource View_Log}" Click="Go_Log_Click" InputGestureText="Ctrl+L"/>
             </MenuItem>
 
             <MenuItem Header="{DynamicResource Menu_Tools}">
@@ -45,14 +73,39 @@
             </DockPanel>
         </Border>
 
-        <!-- Tabs -->
-        <TabControl x:Name="MainTabs" Margin="12">
+        <!-- Main content: kept as tabs internally, but the tab strip is hidden.
+             Use View-menu navigation above. -->
+        <TabControl x:Name="MainTabs" Margin="12" Style="{StaticResource TabControl_NoTabStrip}">
             <!-- Run job -->
             <TabItem Header="{DynamicResource Tab_RunJob}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel>
                         <GroupBox Header="{DynamicResource Gb_RunPipeline}" Padding="10" Margin="0,0,0,10">
-                            <TextBlock Text="{DynamicResource Txt_RunPipeline_Next}" TextWrapping="Wrap"/>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="170"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Lbl_OutputMode}"/>
+                                <ComboBox Grid.Row="0" Grid.Column="1" x:Name="OutputModeCombo" Margin="0,0,10,0" MinWidth="240"/>
+
+                                <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
+                                    <Button Width="140" Content="{DynamicResource Btn_RunJob}" Click="RunJob_Click"/>
+                                    <Button x:Name="CancelJobButton" Width="120" Margin="10,0,0,0" Content="{DynamicResource Btn_CancelJob}" Click="CancelJob_Click"/>
+                                </StackPanel>
+
+                                <ProgressBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" x:Name="JobProgress" Height="18" Minimum="0" Maximum="100"/>
+                                <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" x:Name="JobStatusText" Margin="0,6,0,0" TextWrapping="Wrap"/>
+                                <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Opacity="0.75" TextWrapping="Wrap" Text="{DynamicResource Txt_RunPipeline_Next}"/>
+                            </Grid>
                         </GroupBox>
 
                         <GroupBox Header="{DynamicResource Gb_JobSelection}" Padding="10">
@@ -252,6 +305,26 @@
                             </Grid>
                         </GroupBox>
 
+                        <GroupBox Header="{DynamicResource Gb_SharePointProvisioning}" Padding="10" Margin="0,0,0,10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="170"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Lbl_SharePointSetupPath}"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding SharePointProvisioningPath, ElementName=RootWindow}"/>
+                                <Button Grid.Row="0" Grid.Column="2" MinWidth="160" Content="{DynamicResource Btn_OpenSharePointSetup}" Click="OpenSharePointSetupFolder_Click"/>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,8,0,0" TextWrapping="Wrap" Text="{DynamicResource Txt_SharePointSetupHelp}"/>
+                            </Grid>
+                        </GroupBox>
+
                         <GroupBox Header="{DynamicResource Gb_Notes}" Padding="10">
                             <TextBlock TextWrapping="Wrap" Text="{DynamicResource Txt_Notes_Api}"/>
                         </GroupBox>
@@ -296,19 +369,7 @@
 
                     <DataGrid Grid.Row="1" x:Name="ProductionGrid" AutoGenerateColumns="False"
                               CanUserAddRows="True" CanUserDeleteRows="True" SelectionMode="Single"
-                              HeadersVisibility="Column" IsReadOnly="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="{DynamicResource Prod_Col_Date}" Binding="{Binding Timestamp}" Width="160"/>
-                            <DataGridTextColumn Header="{DynamicResource Prod_Col_Title}" Binding="{Binding Title}" Width="*"/>
-                            <DataGridTextColumn Header="{DynamicResource Prod_Col_Language}" Binding="{Binding Language}" Width="120"/>
-                            <DataGridTextColumn Header="{DynamicResource Prod_Col_Model}" Binding="{Binding ModelId}" Width="160"/>
-                            <DataGridTextColumn Header="{DynamicResource Prod_Col_Voice}" Binding="{Binding VoiceName}" Width="200"/>
-                            <DataGridTextColumn Header="{DynamicResource Prod_Col_VoiceId}" Binding="{Binding VoiceId}" Width="200"/>
-                            <DataGridTextColumn Header="{DynamicResource Prod_Col_Source}" Binding="{Binding SourceFile}" Width="240"/>
-                            <DataGridTextColumn Header="{DynamicResource Prod_Col_JobFolder}" Binding="{Binding JobFolder}" Width="240"/>
-                            <DataGridTextColumn Header="{DynamicResource Prod_Col_Notes}" Binding="{Binding Notes}" Width="240"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                              HeadersVisibility="Column" IsReadOnly="False"></DataGrid>
 
                     <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,10,0,0">
                         <Button MinWidth="160" Margin="0,0,10,0" Content="{DynamicResource Btn_AddFromCurrentJob}"

@@ -147,6 +147,48 @@ public sealed class PipelineRunner
         log($"Skrev: {outText} ({text.Length} tegn)");
     }
 
+
+    private static List<string>? TryLoadEditorSegments(JobManifest job, Action<string> log)
+    {
+        try
+        {
+            var segDir = Path.Combine(job.OutputRoot, "segments");
+            if (!Directory.Exists(segDir)) return null;
+
+            // Prefer TTS track edits (avoid API calls for preview; this is local text files)
+            var ttsFiles = Directory.EnumerateFiles(segDir, "*.tts.txt", SearchOption.TopDirectoryOnly)
+                .OrderBy(f => f, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            if (ttsFiles.Count == 0) return null;
+
+            var texts = new List<string>();
+            foreach (var ttsPath in ttsFiles)
+            {
+                var t = File.ReadAllText(ttsPath).Trim();
+                if (string.IsNullOrWhiteSpace(t))
+                {
+                    var sourcePath = ttsPath.Replace(".tts.txt", ".source.txt");
+                    if (File.Exists(sourcePath))
+                        t = File.ReadAllText(sourcePath).Trim();
+                }
+
+                if (!string.IsNullOrWhiteSpace(t))
+                    texts.Add(t);
+            }
+
+            if (texts.Count == 0) return null;
+
+            log($"Loaded {texts.Count} segment(s) from TTS editor: {segDir}");
+            return texts;
+        }
+        catch (Exception ex)
+        {
+            log("Could not load editor segments: " + ex.Message);
+            return null;
+        }
+    }
+
     private async Task DoTtsAsync(JobManifest job, string? apiKey, Action<string> log, Action<string> status, CancellationToken ct)
     {
         apiKey ??= Environment.GetEnvironmentVariable("ELEVENLABS_API_KEY");
@@ -162,18 +204,40 @@ public sealed class PipelineRunner
         var settings = job.Tts.Settings;
         var text = await File.ReadAllTextAsync(dtbookTextPath, ct);
 
+        // Normalize max chars per segment (defaults depend on model)
+        if (settings.MaxCharsPerSegment <= 0)
+            settings.MaxCharsPerSegment = TextSegmenter.GetSafeMaxChars(settings.ModelId);
+
         if (job.Tts.Segments.Count == 0)
         {
-            var segs = TextSegmentation.SplitIntoSegments(text, settings.MaxCharsPerSegment);
-            job.Tts.Segments = segs.Select((t, i) => new TtsSegment
+            // If the user already built/edited segments in the GUI (jobFolder/segments), use those.
+            var editorSegs = TryLoadEditorSegments(job, log);
+
+            var segTexts = new List<string>();
+            if (editorSegs != null)
             {
-                Index = i,
+                foreach (var t in editorSegs)
+                {
+                    if (t.Length > settings.MaxCharsPerSegment)
+                        segTexts.AddRange(TextSegmenter.SplitForTts(t, settings.MaxCharsPerSegment));
+                    else
+                        segTexts.Add(t);
+                }
+            }
+            else
+            {
+                segTexts = TextSegmenter.SplitForTts(text, settings.MaxCharsPerSegment).ToList();
+            }
+
+            job.Tts.Segments = segTexts.Select((t, i) => new TtsSegment
+            {
+                Index = i + 1,
                 Text = t,
                 CacheKey = ElevenLabsClient.ComputeCacheKey(job.ElevenLabsVoiceId, settings.ModelId, settings.OutputFormat, t)
             }).ToList();
 
             _store.Save(job.OutputRoot, job);
-            log($"Lavede {job.Tts.Segments.Count} TTS-segmenter (max {settings.MaxCharsPerSegment} tegn pr segment)");
+            log($"Built {job.Tts.Segments.Count} TTS segment(s) (max {settings.MaxCharsPerSegment} chars per segment)");
         }
 
         var ext = GuessAudioExtension(settings.OutputFormat);

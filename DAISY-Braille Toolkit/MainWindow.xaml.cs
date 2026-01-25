@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace DAISY_Braille_Toolkit
 {
     public partial class MainWindow : Window
     {
+        public string SharePointProvisioningPath { get; } = System.IO.Path.Combine(AppContext.BaseDirectory, "Provisioning");
+
         private readonly AppSettingsStore _settingsStore = new();
         private AppSettings _settings = new();
 
@@ -34,6 +37,8 @@ namespace DAISY_Braille_Toolkit
             _settings = _settingsStore.Load();
             InitModelCombo();
             LoadVoicesFromCache();
+            InitOutputModeCombo();
+
 
 
             // Preview player wiring (gives feedback if audio fails)
@@ -382,8 +387,8 @@ namespace DAISY_Braille_Toolkit
         {
             using var dlg = new WinForms.OpenFileDialog
             {
-                Filter = "Tekstfiler (*.txt)|*.txt|Alle filer (*.*)|*.*",
-                Title = "Vælg en tekstfil (kilde)"
+                Filter = "Text/Word (*.txt;*.docx)|*.txt;*.docx|Text files (*.txt)|*.txt|Word documents (*.docx)|*.docx|All files (*.*)|*.*",
+                Title = "Vælg kildefil (txt/docx)"
             };
 
             if (dlg.ShowDialog() == WinForms.DialogResult.OK && !string.IsNullOrWhiteSpace(dlg.FileName))
@@ -420,7 +425,9 @@ namespace DAISY_Braille_Toolkit
 
                 var modelId = ModelCombo.SelectedItem as string ?? ElevenLabsModels.Default;
 
-                var sourceText = File.ReadAllText(sourceFile, Encoding.UTF8);
+            // IMPORTANT: Source may be .txt or .docx. For .docx we must extract
+            // real text (and headings) instead of reading raw binary bytes.
+            var sourceText = DocumentTextExtractor.ExtractText(sourceFile);
 
                 _job = new JobWorkspace(jobFolder);
                 _segments = _job.BuildSegmentsFromSourceText(sourceText, modelId);
