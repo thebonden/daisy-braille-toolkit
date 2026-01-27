@@ -203,6 +203,24 @@ namespace DAISY_Braille_Toolkit
 
             CleanupCheck.IsChecked = _settings.CleanupTempAfterJob;
 
+            // SharePoint connection settings
+            if (SharePointEnabledCheck != null)
+                SharePointEnabledCheck.IsChecked = _settings.SharePointEnabled;
+            if (SharePointSiteUrlBox != null)
+                SharePointSiteUrlBox.Text = _settings.SharePointSiteUrl ?? "";
+            if (SharePointTenantIdBox != null)
+                SharePointTenantIdBox.Text = _settings.SharePointTenantId ?? "";
+            if (SharePointClientIdBox != null)
+                SharePointClientIdBox.Text = _settings.SharePointClientId ?? "";
+            if (SharePointCountersListBox != null)
+                SharePointCountersListBox.Text = string.IsNullOrWhiteSpace(_settings.SharePointCountersList) ? "DBT_Counters" : _settings.SharePointCountersList;
+            if (SharePointProductionsListBox != null)
+                SharePointProductionsListBox.Text = string.IsNullOrWhiteSpace(_settings.SharePointProductionsList) ? "DBT_Productions" : _settings.SharePointProductionsList;
+            if (VolumeLabelPrefixBox != null)
+                VolumeLabelPrefixBox.Text = _settings.VolumeLabelPrefix ?? "";
+            if (SequenceDigitsBox != null)
+                SequenceDigitsBox.Text = (_settings.SequenceDigits <= 0 ? 3 : _settings.SequenceDigits).ToString();
+
             SettingsSavedText.Text = "";
             PreviewStatusText.Text = "";
             SegmentsStatusText.Text = "";
@@ -213,6 +231,20 @@ namespace DAISY_Braille_Toolkit
             _settings.DefaultModel = ModelCombo.SelectedItem as string ?? ElevenLabsModels.All[0];
             _settings.DefaultVoiceId = VoiceCombo.SelectedValue as string ?? "";
             _settings.CleanupTempAfterJob = CleanupCheck.IsChecked == true;
+
+            // SharePoint connection settings
+            _settings.SharePointEnabled = SharePointEnabledCheck.IsChecked == true;
+            _settings.SharePointSiteUrl = SharePointSiteUrlBox.Text?.Trim() ?? "";
+            _settings.SharePointTenantId = SharePointTenantIdBox.Text?.Trim() ?? "";
+            _settings.SharePointClientId = SharePointClientIdBox.Text?.Trim() ?? "";
+            _settings.SharePointCountersList = string.IsNullOrWhiteSpace(SharePointCountersListBox.Text) ? "DBT_Counters" : SharePointCountersListBox.Text.Trim();
+            _settings.SharePointProductionsList = string.IsNullOrWhiteSpace(SharePointProductionsListBox.Text) ? "DBT_Productions" : SharePointProductionsListBox.Text.Trim();
+            _settings.VolumeLabelPrefix = VolumeLabelPrefixBox.Text?.Trim() ?? "";
+
+            if (int.TryParse(SequenceDigitsBox.Text?.Trim(), out var digits) && digits is >= 1 and <= 6)
+                _settings.SequenceDigits = digits;
+            else
+                _settings.SequenceDigits = 3;
 
             _settingsStore.Save(_settings);
             SettingsSavedText.Text = $"Gemt {DateTime.Now:dd-MM-yyyy HH:mm}";

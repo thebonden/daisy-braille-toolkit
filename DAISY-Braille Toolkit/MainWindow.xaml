@@ -57,6 +57,12 @@
                 <MenuItem x:Name="LangDanishMenu" Header="{DynamicResource Menu_Language_Danish}" IsCheckable="True" Click="SetDanish_Click"/>
             </MenuItem>
 
+            <MenuItem Header="{DynamicResource Menu_Setup}">
+                <MenuItem Header="{DynamicResource Menu_Setup_SharePointAuth}" Click="OpenSharePointAuthDialog_Click"/>
+                <Separator/>
+                <MenuItem Header="{DynamicResource Menu_Setup_OpenSharePointProvisioning}" Click="OpenSharePointSetupFolder_Click"/>
+            </MenuItem>
+
             <MenuItem Header="{DynamicResource Menu_Help}">
                 <MenuItem Header="{DynamicResource Menu_Help_About}" Click="About_Click"/>
             </MenuItem>
@@ -322,6 +328,51 @@
                                 <Button Grid.Row="0" Grid.Column="2" MinWidth="160" Content="{DynamicResource Btn_OpenSharePointSetup}" Click="OpenSharePointSetupFolder_Click"/>
 
                                 <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,8,0,0" TextWrapping="Wrap" Text="{DynamicResource Txt_SharePointSetupHelp}"/>
+                            </Grid>
+                        </GroupBox>
+
+                        <GroupBox Header="{DynamicResource Gb_SharePointConnection}" Padding="10" Margin="0,0,0,10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="170"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="170"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" x:Name="SharePointEnabledCheck"
+                                          Content="{DynamicResource Chk_SharePointEnabled}"/>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Lbl_SharePointSiteUrl}"/>
+                                <TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,10,0" x:Name="SharePointSiteUrlBox"/>
+
+                                <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Text="{DynamicResource Lbl_VolumeLabelPrefix}"/>
+                                <TextBox Grid.Row="1" Grid.Column="3" x:Name="VolumeLabelPrefixBox"/>
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Lbl_SharePointTenantId}"/>
+                                <TextBox Grid.Row="2" Grid.Column="1" Margin="0,0,10,0" x:Name="SharePointTenantIdBox"/>
+
+                                <TextBlock Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Text="{DynamicResource Lbl_SequenceDigits}"/>
+                                <TextBox Grid.Row="2" Grid.Column="3" x:Name="SequenceDigitsBox"/>
+
+                                <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Lbl_SharePointClientId}"/>
+                                <TextBox Grid.Row="3" Grid.Column="1" Margin="0,0,10,0" x:Name="SharePointClientIdBox"/>
+
+                                <TextBlock Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" Text="{DynamicResource Lbl_SharePointCountersList}"/>
+                                <TextBox Grid.Row="3" Grid.Column="3" x:Name="SharePointCountersListBox"/>
+
+                                <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Top" Margin="0,6,0,0" Text="{DynamicResource Lbl_SharePointProductionsList}"/>
+                                <TextBox Grid.Row="4" Grid.Column="1" Margin="0,6,10,0" x:Name="SharePointProductionsListBox"/>
+
+                                <TextBlock Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,6,0,0" Opacity="0.75" TextWrapping="Wrap"
+                                           Text="{DynamicResource Txt_SharePointConnectionHelp}"/>
                             </Grid>
                         </GroupBox>
 

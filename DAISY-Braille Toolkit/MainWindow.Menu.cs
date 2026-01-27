@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using DAISY_Braille_Toolkit.Services.SharePoint;
 using System.Windows;
 using System.Windows.Input;
 using DAISY_Braille_Toolkit.Services;
@@ -29,7 +30,8 @@ namespace DAISY_Braille_Toolkit
         }
 
         // Optional keyboard shortcuts (matches the hints in the View menu)
-        private void RootWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        // NOTE: Fully qualify KeyEventArgs to avoid ambiguity when UseWindowsForms=true
+        private void RootWindow_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (Keyboard.Modifiers != ModifierKeys.Control)
                 return;
@@ -145,6 +147,32 @@ namespace DAISY_Braille_Toolkit
                     LanguageManager.T("Title_Error", "Error"),
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
+            }
+        }
+
+        private void OpenSharePointAuthDialog_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Use current values from UI (so user does not need to save Settings first)
+                var cfg = new SharePointAuthConfig(
+                    SharePointTenantIdBox.Text?.Trim() ?? string.Empty,
+                    SharePointClientIdBox.Text?.Trim() ?? string.Empty,
+                    SharePointSiteUrlBox.Text?.Trim() ?? string.Empty,
+                    SharePointCountersListBox.Text?.Trim() ?? "DBT_Counters",
+                    SharePointProductionsListBox.Text?.Trim() ?? "DBT_Productions"
+                );
+
+                var wnd = new SharePointAuthWindow(cfg)
+                {
+                    Owner = this
+                };
+                wnd.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                AppendLog("SharePointAuth dialog fejl: " + ex);
+                System.Windows.MessageBox.Show("Kunne ikke åbne SharePoint login/test-vindue: " + ex.Message, "DAISY-Braille Toolkit", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

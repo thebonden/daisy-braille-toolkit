@@ -477,16 +477,26 @@ def create_iso(iso_cmd: str, source_dir: Path, iso_path: Path, volume_name: str)
     create_iso_via_powershell_imapi2(source_dir, iso_path, volume_name)
 
 # ===== Volume label counter =====
-def next_volume_label(script_dir: Path) -> str:
-    counter_path = script_dir / "production_counter.json"
-    now = datetime.datetime.now()
-    date = now.strftime("%d%m%y")
-    data = load_optional_json(counter_path, default={"date": date, "counter": 0})
-    if data.get("date") != date:
-        data = {"date": date, "counter": 0}
-    data["counter"] = int(data.get("counter", 0)) + 1
+def next_volume_label(script_dir: Path, settings: dict, *, max_seq: int = 999) -> str:
+    """<PREFIX>_DDMMYY_NNN (løbenr pr. prefix+dato).
+
+    - Prefix hentes fra settings['VOLUME_PREFIX'] (fallback: DBS)
+    - COUNTER_DB_PATH kan angives i settings (fallback: production_counter.json i script-mappen)
+    - NNN: 000..999 (nulstilles når den når 999)
+    """
+    counter_path = Path(settings.get('COUNTER_DB_PATH') or 'production_counter.json')
+    if not counter_path.is_absolute():
+        counter_path = script_dir / counter_path
+    prefix = (settings.get('VOLUME_PREFIX') or 'DBS').strip()
+    date_key = datetime.datetime.now().strftime('%d%m%y')
+    data = load_optional_json(counter_path, default={})
+    key = f"{prefix}_{date_key}"
+    next_no = int(data.get(key, 0) or 0)
+    if next_no > max_seq:
+        raise RuntimeError(f"Sequence exhausted for {key}: {next_no} > {max_seq}")
+    data[key] = next_no + 1
     save_json(counter_path, data)
-    return f"DBS_{date}_{data['counter']:05d}"
+    return f"{prefix}_{date_key}_{next_no:03d}"
 
 # ===== PEF via DAISY Pipeline 2 =====
 def resolve_pipeline_cmd(settings: dict, script_dir: Path) -> str:
@@ -589,7 +599,7 @@ def process_one_file(input_file: Path, *,
     work = Path(tempfile.mkdtemp(prefix="daisy_work_"))
     try:
         book_name = input_file.stem
-        volume_label = next_volume_label(script_dir)
+        volume_label = next_volume_label(script_dir, settings)
 
         text_file = work / "input.txt"
         docx_to_text(input_file, text_file)

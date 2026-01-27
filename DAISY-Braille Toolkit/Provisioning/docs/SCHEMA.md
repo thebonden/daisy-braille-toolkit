@@ -1,10 +1,10 @@
 # DBT SharePoint Schema (v1)
 
 ## Core lists
-- `DBT_Counters`: atomic counters per DateKey
-  - DateKey (Text, required, unique)
+- `DBT_Counters`: atomic counters per counter key (Prefix+Date)
+  - DateKey (Text, required, unique)  # key like PREFIX_DDMMYY
   - Prefix (Text, required)
-  - NextNumber (Number, required, integer)
+  - NextNumber (Number, required, integer)  # next number to issue (starts at 0)
 
 - `DBT_Productions`: production catalog/log
   - VolumeLabel (Text, required, unique)

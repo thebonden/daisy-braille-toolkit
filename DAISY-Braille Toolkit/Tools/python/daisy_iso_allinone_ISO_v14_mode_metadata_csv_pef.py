@@ -562,19 +562,24 @@ def _save_counter(db_path: Path, data: dict) -> None:
     db_path.parent.mkdir(parents=True, exist_ok=True)
     db_path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
-def next_volume_label(prefix: str, db_path: Path) -> str:
-    """DBS_DDMMYY_00001 (løbenr pr. dato)."""
+def next_volume_label(prefix: str, db_path: Path, *, max_seq: int = 999) -> str:
+    """<PREFIX>_DDMMYY_NNN (løbenr pr. prefix+dato).
+
+    - Prefix: 3–5 tegn (A–Z/0–9 anbefalet)
+    - NNN: 000..999 (nulstilles når den når 999)
+    """
     prefix = (prefix or "DBS").strip()
     date_key = datetime.datetime.now().strftime("%d%m%y")  # ddmmyy
     data = _load_counter(db_path)
-    last = int(data.get(date_key, 0) or 0)
-    new = last + 1
-    data[date_key] = new
+    key = f"{prefix}_{date_key}"
+    next_no = int(data.get(key, 0) or 0)
+    if next_no > max_seq:
+        raise RuntimeError(f"Sequence exhausted for {key}: {next_no} > {max_seq}")
+    data[key] = next_no + 1
     _save_counter(db_path, data)
-    return f"{prefix}_{date_key}_{new:05d}"
+    return f"{prefix}_{date_key}_{next_no:03d}"
 
 def _resolve_cmd(cmd: str, script_dir: Path) -> str:
-(cmd: str, script_dir: Path) -> str:
     """Hvis cmd peger på en fil i script-mappen, brug fuld sti. Ellers returnér cmd uændret."""
     cmd = (cmd or "").strip()
     if not cmd:

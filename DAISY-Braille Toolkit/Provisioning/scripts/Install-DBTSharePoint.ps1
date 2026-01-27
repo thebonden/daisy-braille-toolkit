@@ -251,7 +251,7 @@ Connect-Dbt
 
 # DBT_Counters
 Ensure-List "DBT_Counters" "Internal counters used to reserve unique production IDs."
-Ensure-TextField   -List "DBT_Counters" -InternalName "DateKey" -DisplayName "DateKey" -MaxLength 8 -Required $true -Unique $true
+Ensure-TextField   -List "DBT_Counters" -InternalName "DateKey" -DisplayName "DateKey" -MaxLength 32 -Required $true -Unique $true
 Ensure-TextField   -List "DBT_Counters" -InternalName "Prefix" -DisplayName "Prefix" -MaxLength 10 -Required $true
 Ensure-NumberField -List "DBT_Counters" -InternalName "NextNumber" -DisplayName "NextNumber" -Required $true -Decimals 0
 

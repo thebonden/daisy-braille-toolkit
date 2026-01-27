@@ -28,6 +28,9 @@
 
   <sys:String x:Key="Menu_Help">_Hjælp</sys:String>
   <sys:String x:Key="Menu_Help_About">_Om...</sys:String>
+  <sys:String x:Key="Menu_Setup">_Opsætning</sys:String>
+  <sys:String x:Key="Menu_Setup_SharePointAuth">SharePoint _login/test...</sys:String>
+  <sys:String x:Key="Menu_Setup_OpenSharePointProvisioning">Åbn SharePoint provisioning-mappe</sys:String>
 
   <!-- Header -->
   <sys:String x:Key="Header_Subtitle">Gør dokumenter tilgængelige: DAISY + TTS + PEF</sys:String>
@@ -49,6 +52,17 @@
   <sys:String x:Key="Lbl_SharePointSetupPath">Provisioning-mappe:</sys:String>
   <sys:String x:Key="Btn_OpenSharePointSetup">Åbn mappe</sys:String>
   <sys:String x:Key="Txt_SharePointSetupHelp">Kør Install-DBTSharePoint.ps1 i denne mappe for at oprette de nødvendige SharePoint-lister (engangs-opsætning).</sys:String>
+
+  <sys:String x:Key="Gb_SharePointConnection">SharePoint forbindelse (læs/skriv)</sys:String>
+  <sys:String x:Key="Chk_SharePointEnabled">Aktivér SharePoint synk</sys:String>
+  <sys:String x:Key="Lbl_SharePointSiteUrl">Site URL:</sys:String>
+  <sys:String x:Key="Lbl_SharePointTenantId">Tenant ID:</sys:String>
+  <sys:String x:Key="Lbl_SharePointClientId">Client ID:</sys:String>
+  <sys:String x:Key="Lbl_SharePointCountersList">Counters-liste:</sys:String>
+  <sys:String x:Key="Lbl_SharePointProductionsList">Productions-liste:</sys:String>
+  <sys:String x:Key="Lbl_VolumeLabelPrefix">Prefix:</sys:String>
+  <sys:String x:Key="Lbl_SequenceDigits">Antal cifre (løbenr):</sys:String>
+  <sys:String x:Key="Txt_SharePointConnectionHelp">Udfyld disse felter efter IT har lavet Entra ID App Registration og SharePoint-lister. Det fortæller app’en hvor den skal reservere ID’er og gemme metadata.</sys:String>
 
   <sys:String x:Key="Gb_Notes">Noter</sys:String>
 
