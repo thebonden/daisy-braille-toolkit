@@ -1,7 +1,7 @@
 name: Release (unsigned)
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: {}
   push:
     tags:
       - "v*"
@@ -45,5 +45,7 @@ jobs:
           name: DAISY-Braille-Toolkit-win-x64-unsigned
           path: "./out/DAISY-Braille-Toolkit-win-x64.zip"
 
-      - name: Generate build provenance attestation (zip)
-        uses: actions/attest-build-prove
+      - name: Generate build provenance attestation (for the zip)
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: "out/DAISY-Braille-Toolkit-win-x64.zip"

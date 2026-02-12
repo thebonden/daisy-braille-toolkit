@@ -2,8 +2,10 @@ name: Build and Package MSI
 
 on:
   push:
-    branches: [ main ]
-    tags: [ 'v*' ]
+    branches:
+      - main
+    tags:
+      - "v*"
   workflow_dispatch: {}
 
 jobs:
@@ -11,46 +13,46 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '8.0.x'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
 
-    - name: Install WiX (choco)
-      shell: powershell
-      run: |
-        choco install wix -y
-        refreshenv
+      - name: Install WiX (choco)
+        shell: powershell
+        run: |
+          choco install wix -y
+          refreshenv
 
-    - name: Prepare signing PFX (optional)
-      if: ${{ secrets.SIGNING_PFX_B64 != '' }}
-      shell: powershell
-      run: |
-        Write-Host "Preparing signing PFX from secret"
-        $out = Join-Path $Env:GITHUB_WORKSPACE "Installer\signing.pfx"
-        $bytes = [System.Convert]::FromBase64String("${{ secrets.SIGNING_PFX_B64 }}")
-        [System.IO.File]::WriteAllBytes($out, $bytes)
-        echo "SIGNING_PFX=$out" >> $Env:GITHUB_ENV
-        echo "SIGNING_PFX_PASS=${{ secrets.SIGNING_PFX_PASS }}" >> $Env:GITHUB_ENV
+      - name: Prepare signing PFX (optional)
+        if: ${{ secrets.SIGNING_PFX_B64 != '' }}
+        shell: powershell
+        run: |
+          Write-Host "Preparing signing PFX from secret"
+          $out = Join-Path $Env:GITHUB_WORKSPACE "Installer\signing.pfx"
+          $bytes = [System.Convert]::FromBase64String("${{ secrets.SIGNING_PFX_B64 }}")
+          [System.IO.File]::WriteAllBytes($out, $bytes)
+          echo "SIGNING_PFX=$out" >> $Env:GITHUB_ENV
+          echo "SIGNING_PFX_PASS=${{ secrets.SIGNING_PFX_PASS }}" >> $Env:GITHUB_ENV
 
-    - name: Run installer build script
-      shell: powershell
-      run: |
-        Set-StrictMode -Version Latest
-        Push-Location ${{ github.workspace }}
-        .\Installer\Build-Installer.ps1 -ProjectPath "DAISY-Braille Toolkit"
-        Pop-Location
+      - name: Run installer build script
+        shell: powershell
+        run: |
+          Set-StrictMode -Version Latest
+          Push-Location ${{ github.workspace }}
+          .\Installer\Build-Installer.ps1 -ProjectPath "DAISY-Braille Toolkit"
+          Pop-Location
 
-    - name: Upload MSI
-      uses: actions/upload-artifact@v4
-      with:
-        name: DAISY-Braille-Toolkit
-        path: |
-          Installer/DAISY-Braille-Toolkit.msi
-          Installer/*.exe
+      - name: Upload MSI
+        uses: actions/upload-artifact@v4
+        with:
+          name: DAISY-Braille-Toolkit
+          path: |
+            Installer/DAISY-Braille-Toolkit.msi
+            Installer/*.exe
 
   create_release:
     if: startsWith(github.ref, 'refs/tags/')
