@@ -1,0 +1,49 @@
+name: Release (unsigned)
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore
+        run: dotnet restore "./DAISY-Braille Toolkit/DAISY-Braille Toolkit.csproj"
+
+      - name: Build
+        run: dotnet build "./DAISY-Braille Toolkit/DAISY-Braille Toolkit.csproj" -c Release --no-restore
+
+      - name: Publish (win-x64, self-contained single-file)
+        run: dotnet publish "./DAISY-Braille Toolkit/DAISY-Braille Toolkit.csproj" -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true -o "./dist/win-x64"
+
+      - name: Zip artifact
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path "./out" | Out-Null
+          Compress-Archive -Path "./dist/win-x64/*" -DestinationPath "./out/DAISY-Braille-Toolkit-win-x64.zip" -Force
+
+      - name: Upload unsigned artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DAISY-Braille-Toolkit-win-x64-unsigned
+          path: "./out/DAISY-Braille-Toolkit-win-x64.zip"
+
+      - name: Generate build provenance attestation (zip)
+        uses: actions/attest-build-prove

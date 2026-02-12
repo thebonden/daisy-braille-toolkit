@@ -1,0 +1,5 @@
+<WixLocalization Culture="da-DK" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <String Id="WelcomeDlgWelcome">Velkommen til DAISY-Braille Toolkit installationsprogram</String>
+  <String Id="InstallDirDlgTitle">Vælg installationsplacering</String>
+  <String Id="WixUI_MinimalDlg_Browse">Gennemse...</String>
+</WixLocalization>

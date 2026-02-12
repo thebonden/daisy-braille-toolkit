@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace DAISY_Braille_Toolkit.Models
 {
     public class AppSettings
@@ -26,6 +28,10 @@ namespace DAISY_Braille_Toolkit.Models
 
         // Production data
         public string ProductionCsvPath { get; set; } = "";
+
+        // Braille table presets
+        public List<BrailleTableEntry> BrailleTables { get; set; } = new();
+        public string SelectedBrailleTableId { get; set; } = "";
 
         // Backward-compatible aliases (older code names)
         public string DefaultModel { get => ElevenLabsModelId; set => ElevenLabsModelId = value; }

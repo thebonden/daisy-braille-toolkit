@@ -24,6 +24,7 @@ namespace DAISY_Braille_Toolkit
         private List<VoiceInfo> _allVoices = new();
         private readonly MediaPlayer _player = new();
         private static readonly HttpClient _http = new();
+        private readonly Updater _updater;
 
         // TTS editor state
         private JobWorkspace? _job;
@@ -35,6 +36,7 @@ namespace DAISY_Braille_Toolkit
             InitializeComponent();
 
             _settings = _settingsStore.Load();
+            _updater = new Updater(AppendLog);
             InitModelCombo();
             LoadVoicesFromCache();
             InitOutputModeCombo();
@@ -80,9 +82,26 @@ namespace DAISY_Braille_Toolkit
             }
             InitLanguageFilter();
             ApplySettingsToUi();
+            InitBrailleTables();
             RefreshVoiceDetails();
 
             RefreshApiKeyStatus();
+        }
+
+        private async void CheckForUpdates_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                AppendLog("Starter opdaterings-check...");
+                // Ask for both stable and beta? We use stable by default. If user wants beta, we could extend UI.
+                var ok = await _updater.CheckAndPromptAndUpdateAsync(this, includePrerelease: false);
+                AppendLog("Opdaterings-check færdig: " + (ok ? "opdateret" : "ingen ændring"));
+            }
+            catch (Exception ex)
+            {
+                AppendLog("Opdaterings-check fejlede: " + ex.Message);
+                System.Windows.MessageBox.Show("Opdaterings-check fejlede: " + ex.Message);
+            }
         }
 
         // ---------- API KEY ----------
@@ -221,6 +240,9 @@ namespace DAISY_Braille_Toolkit
             if (SequenceDigitsBox != null)
                 SequenceDigitsBox.Text = (_settings.SequenceDigits <= 0 ? 3 : _settings.SequenceDigits).ToString();
 
+            // Braille table settings
+            LoadBrailleTablesFromSettings();
+
             SettingsSavedText.Text = "";
             PreviewStatusText.Text = "";
             SegmentsStatusText.Text = "";
@@ -245,6 +267,10 @@ namespace DAISY_Braille_Toolkit
                 _settings.SequenceDigits = digits;
             else
                 _settings.SequenceDigits = 3;
+
+            _settings.SelectedBrailleTableId = BrailleTableCombo.SelectedValue as string ?? "";
+
+            SyncBrailleTablesToSettings();
 
             _settingsStore.Save(_settings);
             SettingsSavedText.Text = $"Gemt {DateTime.Now:dd-MM-yyyy HH:mm}";

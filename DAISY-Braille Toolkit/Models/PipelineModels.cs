@@ -54,6 +54,9 @@ public sealed class JobManifest
     public string ElevenLabsVoiceId { get; set; } = "";
     public string Language { get; set; } = "da-DK";
 
+    // Braille
+    public string BrailleTableId { get; set; } = "";
+
     // TTS-resume (segmenter + settings). Gemmes i job.json så man kan fortsætte uden at betale igen.
     public TtsJobState? Tts { get; set; }
 

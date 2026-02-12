@@ -43,7 +43,7 @@ public static class DtBookPlaceholder
 
 public static class PefPlaceholder
 {
-    public static string Build(string plainText, string? title, string? author)
+    public static string Build(string plainText, string? title, string? author, string? brailleTableId = null)
     {
         // Dette er IKKE rigtig punktskrift-oversættelse. Kun et placeholder PEF dokument.
         static string E(string s) => SecurityElement.Escape(s) ?? "";
@@ -57,12 +57,16 @@ public static class PefPlaceholder
         var rows = string.Join("\n", lines.Select(l => $"            <row>{E(l)}</row>"));
 
         // Klassisk verbatim interpolated string (ingen C# 11 raw strings)
+        var brailleMeta = string.IsNullOrWhiteSpace(brailleTableId)
+            ? ""
+            : $"    <meta name=\"braille:table\" content=\"{E(brailleTableId)}\"/>\n";
+
         return $@"<?xml version=""1.0"" encoding=""UTF-8""?>
 <pef xmlns=""http://www.daisy.org/ns/2008/pef"" version=""2008-1"">
   <head>
     <meta name=""dc:Title"" content=""{E(title ?? "")}""/>
     <meta name=""dc:Creator"" content=""{E(author ?? "")}""/>
-  </head>
+{brailleMeta}  </head>
   <body>
     <volume>
       <section>

@@ -95,6 +95,7 @@ namespace DAISY_Braille_Toolkit
                 }
 
                 var selectedMode = (OutputModeCombo.SelectedItem as OutputModeItem)?.Mode ?? OutputMode.Both;
+                var brailleTableId = (BrailleTableCombo?.SelectedValue as string) ?? _settings.SelectedBrailleTableId;
 
                 // Prefer the currently selected voice/model; fall back to saved settings.
                 var voiceId = (VoiceCombo.SelectedValue as string) ?? _settings.ElevenLabsVoiceId;
@@ -122,6 +123,7 @@ namespace DAISY_Braille_Toolkit
                 {
                     job = store.CreateInFolder(jobFolder, sourcePath, selectedMode, voiceId);
                     job.Title = Path.GetFileNameWithoutExtension(sourcePath);
+                    job.BrailleTableId = brailleTableId ?? "";
                     job.Tts ??= new TtsJobState();
                     job.Tts.Settings.ModelId = modelId;
                     job.Tts.Settings.MaxCharsPerSegment = TextSegmenter.GetSafeMaxChars(modelId);
@@ -132,6 +134,7 @@ namespace DAISY_Braille_Toolkit
                 // Make sure the job uses the latest selected voice/model when resuming.
                 // Job completion is tracked per-step (JobManifest.Steps), so we always refresh these.
                 job.ElevenLabsVoiceId = voiceId;
+                job.BrailleTableId = brailleTableId ?? "";
                 job.Tts ??= new TtsJobState();
                 job.Tts.Settings.ModelId = modelId;
                 job.Tts.Settings.MaxCharsPerSegment = TextSegmenter.GetSafeMaxChars(modelId);

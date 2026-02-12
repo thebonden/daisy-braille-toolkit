@@ -120,6 +120,7 @@
 
   <sys:String x:Key="Title_Info">Info</sys:String>
   <sys:String x:Key="Title_Error">Error</sys:String>
+  <sys:String x:Key="Msg_Dp2PefFailed">DP2 PEF failed:</sys:String>
 
   <!-- MessageBox strings -->
   <sys:String x:Key="About_Title">About</sys:String>
@@ -159,4 +160,15 @@ DAISY + TTS + PEF</sys:String>
     <sys:String x:Key="Mode_Both">DAISY + Braille</sys:String>
     <sys:String x:Key="Mode_DaisyOnly">DAISY only</sys:String>
     <sys:String x:Key="Mode_BrailleOnly">Braille (PEF) only</sys:String>
+
+  <!-- Braille tables -->
+  <sys:String x:Key="Lbl_BrailleTable">Braille table:</sys:String>
+  <sys:String x:Key="Gb_BrailleTables">Braille tables</sys:String>
+  <sys:String x:Key="Btn_BrailleTables_Add">Add</sys:String>
+  <sys:String x:Key="Btn_BrailleTables_Remove">Remove</sys:String>
+  <sys:String x:Key="Btn_BrailleTables_Import">Import</sys:String>
+  <sys:String x:Key="Btn_BrailleTables_Export">Export</sys:String>
+  <sys:String x:Key="Btn_BrailleTables_Fetch">Fetch from DP2</sys:String>
+  <sys:String x:Key="Col_BrailleTableId">Table</sys:String>
+  <sys:String x:Key="Col_BrailleTableFavorite">Favorite</sys:String>
 </ResourceDictionary>

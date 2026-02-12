@@ -120,6 +120,7 @@
 
   <sys:String x:Key="Title_Info">Info</sys:String>
   <sys:String x:Key="Title_Error">Fejl</sys:String>
+  <sys:String x:Key="Msg_Dp2PefFailed">DP2 PEF fejlede:</sys:String>
 
   <!-- MessageBox strings -->
   <sys:String x:Key="About_Title">Om</sys:String>
@@ -160,4 +161,15 @@ DAISY + TTS + PEF</sys:String>
     <sys:String x:Key="Mode_Both">DAISY + Braille</sys:String>
     <sys:String x:Key="Mode_DaisyOnly">Kun DAISY</sys:String>
     <sys:String x:Key="Mode_BrailleOnly">Kun Braille (PEF)</sys:String>
+
+  <!-- Braille Tables -->
+  <sys:String x:Key="Lbl_BrailleTable">Punktskrift-tabel:</sys:String>
+  <sys:String x:Key="Gb_BrailleTables">Punktskrift-tabeller</sys:String>
+  <sys:String x:Key="Btn_BrailleTables_Add">Tilføj</sys:String>
+  <sys:String x:Key="Btn_BrailleTables_Remove">Fjern</sys:String>
+  <sys:String x:Key="Btn_BrailleTables_Import">Importér</sys:String>
+  <sys:String x:Key="Btn_BrailleTables_Export">Eksportér</sys:String>
+  <sys:String x:Key="Btn_BrailleTables_Fetch">Hent fra DP2</sys:String>
+  <sys:String x:Key="Col_BrailleTableId">Tabel</sys:String>
+  <sys:String x:Key="Col_BrailleTableFavorite">Favorit</sys:String>
 </ResourceDictionary>

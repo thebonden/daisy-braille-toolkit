@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net.Http;
 using DAISY_Braille_Toolkit.Models;
 
@@ -356,14 +357,94 @@ public sealed class PipelineRunner
         var brailleDir = Path.Combine(job.OutputRoot, "braille");
         Directory.CreateDirectory(brailleDir);
 
+        var tableId = (job.BrailleTableId ?? string.Empty).Trim();
+        if (!string.IsNullOrWhiteSpace(tableId))
+        {
+            try
+            {
+                await RunDp2PefAsync(job, tableId, brailleDir, log, ct);
+                return;
+            }
+            catch (Exception ex)
+            {
+                log("DP2 PEF failed, using placeholder: " + ex.Message);
+                var msg = LanguageManager.T("Msg_Dp2PefFailed", "DP2 PEF failed:");
+                var title = LanguageManager.T("Title_Error", "Error");
+                System.Windows.MessageBox.Show($"{msg} {ex.Message}", title, System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+            }
+        }
+
         var textPath = Path.Combine(job.OutputRoot, "dtbook", "fulltext.txt");
         var text = File.Exists(textPath) ? await File.ReadAllTextAsync(textPath, ct) : "";
 
-        var pef = PefPlaceholder.Build(text, job.Title, job.Author);
+        if (!string.IsNullOrWhiteSpace(job.BrailleTableId))
+            log($"Braille table: {job.BrailleTableId}");
+
+        var pef = PefPlaceholder.Build(text, job.Title, job.Author, job.BrailleTableId);
         var outPef = Path.Combine(brailleDir, "book.pef");
         await File.WriteAllTextAsync(outPef, pef, ct);
 
         log($"PEF placeholder skrevet: {outPef}");
+    }
+
+    private static async Task RunDp2PefAsync(JobManifest job, string tableId, string brailleDir, Action<string> log, CancellationToken ct)
+    {
+        var dtbookDir = Path.Combine(job.OutputRoot, "dtbook");
+        Directory.CreateDirectory(dtbookDir);
+
+        var dtbookXml = Path.Combine(dtbookDir, "dtbook.xml");
+        if (!File.Exists(dtbookXml))
+        {
+            var textPath = Path.Combine(dtbookDir, "fulltext.txt");
+            if (!File.Exists(textPath))
+                throw new FileNotFoundException("Missing dtbook/fulltext.txt.", textPath);
+
+            var text = await File.ReadAllTextAsync(textPath, ct);
+            var xml = DtBookPlaceholder.Build(text, job.Title, job.Author, job.Language);
+            await File.WriteAllTextAsync(dtbookXml, xml, ct);
+        }
+
+        var pefOutDir = Path.Combine(brailleDir, "dp2_out");
+        Directory.CreateDirectory(pefOutDir);
+
+        var cmd = ResolvePipelineCmd();
+        var args = $"dtbook-to-pef --source \"{dtbookXml}\" --braille-code \"(liblouis-table:{tableId})\" -o \"{pefOutDir}\"";
+
+        var psi = new ProcessStartInfo
+        {
+            FileName = cmd,
+            Arguments = args,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+
+        using var proc = Process.Start(psi) ?? throw new InvalidOperationException("Could not start DP2 process.");
+        var output = await proc.StandardOutput.ReadToEndAsync(ct);
+        var error = await proc.StandardError.ReadToEndAsync(ct);
+        await proc.WaitForExitAsync(ct);
+
+        if (proc.ExitCode != 0)
+            throw new InvalidOperationException($"DP2 error ({proc.ExitCode}): {error.Trim()}");
+
+        var pef = Directory.EnumerateFiles(pefOutDir, "*.pef", SearchOption.AllDirectories).FirstOrDefault();
+        if (string.IsNullOrWhiteSpace(pef))
+            throw new FileNotFoundException("DP2 produced no .pef file.", pefOutDir);
+
+        var outPef = Path.Combine(brailleDir, "book.pef");
+        File.Copy(pef, outPef, overwrite: true);
+        log($"PEF skrevet via DP2: {outPef}");
+        if (!string.IsNullOrWhiteSpace(output))
+            log(output.Trim());
+    }
+
+    private static string ResolvePipelineCmd()
+    {
+        var local = Path.Combine(AppContext.BaseDirectory, "dp2.exe");
+        if (File.Exists(local))
+            return local;
+        return "pipeline2";
     }
 
     private static void DoIsoAndCsv(JobManifest job, Action<string> log)

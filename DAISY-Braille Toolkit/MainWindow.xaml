@@ -65,6 +65,8 @@
 
             <MenuItem Header="{DynamicResource Menu_Help}">
                 <MenuItem Header="{DynamicResource Menu_Help_About}" Click="About_Click"/>
+                <Separator/>
+                <MenuItem Header="Check for _updates..." Click="CheckForUpdates_Click"/>
             </MenuItem>
         </Menu>
 
@@ -124,6 +126,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
                                 <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Lbl_JobFolder}"/>
@@ -133,6 +136,11 @@
                                 <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Lbl_SourceFile}"/>
                                 <TextBox Grid.Row="1" Grid.Column="1" x:Name="SourceFileBox" Margin="0,0,10,0"/>
                                 <Button Grid.Row="1" Grid.Column="2" Width="140" Content="{DynamicResource Btn_SelectFile}" Click="BrowseSourceFile_Click"/>
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Lbl_BrailleTable}"/>
+                                <ComboBox Grid.Row="2" Grid.Column="1" x:Name="BrailleTableCombo" Margin="0,0,10,0" MinWidth="240"
+                                          DisplayMemberPath="TableId" SelectedValuePath="TableId"
+                                          SelectionChanged="BrailleTableCombo_SelectionChanged"/>
                             </Grid>
                         </GroupBox>
                     </StackPanel>
@@ -373,6 +381,34 @@
 
                                 <TextBlock Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,6,0,0" Opacity="0.75" TextWrapping="Wrap"
                                            Text="{DynamicResource Txt_SharePointConnectionHelp}"/>
+                            </Grid>
+                        </GroupBox>
+
+                        <GroupBox Header="{DynamicResource Gb_BrailleTables}" Padding="10" Margin="0,0,0,10">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                    <Button Width="120" Content="{DynamicResource Btn_BrailleTables_Add}" Click="BrailleTables_Add_Click"/>
+                                    <Button Width="140" Margin="10,0,0,0" Content="{DynamicResource Btn_BrailleTables_Remove}" Click="BrailleTables_Remove_Click"/>
+                                    <Button Width="140" Margin="10,0,0,0" Content="{DynamicResource Btn_BrailleTables_Import}" Click="BrailleTables_Import_Click"/>
+                                    <Button Width="140" Margin="10,0,0,0" Content="{DynamicResource Btn_BrailleTables_Export}" Click="BrailleTables_Export_Click"/>
+                                    <Button Width="140" Margin="10,0,0,0" Content="{DynamicResource Btn_BrailleTables_Fetch}" Click="BrailleTables_Fetch_Click"/>
+                                </StackPanel>
+
+                                <DataGrid Grid.Row="1" x:Name="BrailleTablesGrid" AutoGenerateColumns="False"
+                                          CanUserAddRows="False" CanUserDeleteRows="False"
+                                          HeadersVisibility="Column" IsReadOnly="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="{DynamicResource Col_BrailleTableId}"
+                                                            Binding="{Binding TableId, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                                        <DataGridCheckBoxColumn Header="{DynamicResource Col_BrailleTableFavorite}"
+                                                                Binding="{Binding IsFavorite}" Width="Auto"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
                             </Grid>
                         </GroupBox>
 
