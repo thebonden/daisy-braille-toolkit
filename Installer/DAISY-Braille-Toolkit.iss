@@ -19,7 +19,6 @@ AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 
-; Per-user install (ingen admin/UAC)
 PrivilegesRequired=lowest
 DefaultDirName={localappdata}\Programs\{#MyAppName}
 DefaultGroupName={#MyAppName}
@@ -28,7 +27,8 @@ ArchitecturesAllowed=x64
 ArchitecturesInstallIn64BitMode=x64
 MinVersion=10.0
 
-DisableProgramGroupPage=yes
+DisableDirPage=no
+DisableProgramGroupPage=no
 WizardStyle=modern
 
 OutputDir=..\out
@@ -36,15 +36,30 @@ OutputBaseFilename=DAISY-Braille-Toolkit-Setup
 Compression=lzma2
 SolidCompression=yes
 
+[Languages]
+Name: "english"; MessagesFile: "compiler:Default.isl"
+Name: "danish"; MessagesFile: "compiler:Languages\Danish.isl"
+
+[CustomMessages]
+english.ShortcutsGroup=Shortcuts:
+danish.ShortcutsGroup=Genveje:
+english.DesktopShortcut=Create a desktop shortcut
+danish.DesktopShortcut=Opret genvej på skrivebordet
+english.StartMenuShortcut=Create a Start Menu shortcut
+danish.StartMenuShortcut=Opret genvej i Startmenuen
+english.StartApp=Start {#MyAppName}
+danish.StartApp=Start {#MyAppName}
+
 [Tasks]
-Name: "desktopicon"; Description: "Opret genvej på skrivebordet"; GroupDescription: "Genveje:"
+Name: "desktopicon"; Description: "{cm:DesktopShortcut}"; GroupDescription: "{cm:ShortcutsGroup}"
+Name: "startmenuicon"; Description: "{cm:StartMenuShortcut}"; GroupDescription: "{cm:ShortcutsGroup}"
 
 [Files]
 Source: "..\dist\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
-Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+Name: "{userprograms}\{#MyAppName}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: startmenuicon
+Name: "{userdesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "Start {#MyAppName}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:StartApp}"; Flags: nowait postinstall skipifsilent
