@@ -71,7 +71,12 @@
         </Menu>
 
         <!-- Header (logo + title) -->
-        <Border DockPanel.Dock="Top" Background="#F5F5F5" Padding="10" BorderBrush="#DDDDDD" BorderThickness="0,0,0,1">
+        <Border DockPanel.Dock="Top"
+                Background="{DynamicResource AppHeaderBackgroundBrush}"
+                BorderBrush="{DynamicResource AppHeaderBorderBrush}"
+                BorderThickness="0,0,0,1"
+                Padding="10"
+                TextElement.Foreground="{DynamicResource AppControlForegroundBrush}">
             <DockPanel>
                 <Image Source="Assets/logo-mark.png" Height="42" Stretch="Uniform" Margin="0,0,10,0"/>
                 <StackPanel>
@@ -102,8 +107,9 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Lbl_OutputMode}"/>
-                                <ComboBox Grid.Row="0" Grid.Column="1" x:Name="OutputModeCombo" Margin="0,0,10,0" MinWidth="240"/>
+                                <TextBlock Grid.Row="0" Grid.Column="0" x:Name="LblOutputMode" VerticalAlignment="Center" Text="{DynamicResource Lbl_OutputMode}"/>
+                                <ComboBox Grid.Row="0" Grid.Column="1" x:Name="OutputModeCombo" Margin="0,0,10,0" MinWidth="240"
+                                          AutomationProperties.LabeledBy="{Binding ElementName=LblOutputMode}"/>
 
                                 <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
                                     <Button Width="140" Content="{DynamicResource Btn_RunJob}" Click="RunJob_Click"/>
@@ -129,18 +135,21 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
-                                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Lbl_JobFolder}"/>
-                                <TextBox Grid.Row="0" Grid.Column="1" x:Name="JobFolderBox" Margin="0,0,10,0"/>
+                                <TextBlock Grid.Row="0" Grid.Column="0" x:Name="LblJobFolder" VerticalAlignment="Center" Text="{DynamicResource Lbl_JobFolder}"/>
+                                <TextBox Grid.Row="0" Grid.Column="1" x:Name="JobFolderBox" Margin="0,0,10,0"
+                                         AutomationProperties.LabeledBy="{Binding ElementName=LblJobFolder}"/>
                                 <Button Grid.Row="0" Grid.Column="2" Width="140" Content="{DynamicResource Btn_SelectFolder}" Click="BrowseJobFolder_Click"/>
 
-                                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Lbl_SourceFile}"/>
-                                <TextBox Grid.Row="1" Grid.Column="1" x:Name="SourceFileBox" Margin="0,0,10,0"/>
+                                <TextBlock Grid.Row="1" Grid.Column="0" x:Name="LblSourceFile" VerticalAlignment="Center" Text="{DynamicResource Lbl_SourceFile}"/>
+                                <TextBox Grid.Row="1" Grid.Column="1" x:Name="SourceFileBox" Margin="0,0,10,0"
+                                         AutomationProperties.LabeledBy="{Binding ElementName=LblSourceFile}"/>
                                 <Button Grid.Row="1" Grid.Column="2" Width="140" Content="{DynamicResource Btn_SelectFile}" Click="BrowseSourceFile_Click"/>
 
-                                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Lbl_BrailleTable}"/>
+                                <TextBlock Grid.Row="2" Grid.Column="0" x:Name="LblBrailleTable" VerticalAlignment="Center" Text="{DynamicResource Lbl_BrailleTable}"/>
                                 <ComboBox Grid.Row="2" Grid.Column="1" x:Name="BrailleTableCombo" Margin="0,0,10,0" MinWidth="240"
                                           DisplayMemberPath="TableId" SelectedValuePath="TableId"
-                                          SelectionChanged="BrailleTableCombo_SelectionChanged"/>
+                                          SelectionChanged="BrailleTableCombo_SelectionChanged"
+                                          AutomationProperties.LabeledBy="{Binding ElementName=LblBrailleTable}"/>
                             </Grid>
                         </GroupBox>
                     </StackPanel>
@@ -182,17 +191,20 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
 
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{DynamicResource Lbl_Segments}" FontWeight="SemiBold"/>
-                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{DynamicResource Lbl_Source}" FontWeight="SemiBold"/>
-                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{DynamicResource Lbl_Tts}" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="0" x:Name="LblSegments" Text="{DynamicResource Lbl_Segments}" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="1" x:Name="LblSource" Text="{DynamicResource Lbl_Source}" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="2" x:Name="LblTts" Text="{DynamicResource Lbl_Tts}" FontWeight="SemiBold"/>
 
-                                    <ListBox Grid.Row="1" Grid.Column="0" x:Name="SegmentsList" SelectionChanged="SegmentsList_SelectionChanged"/>
+                                    <ListBox Grid.Row="1" Grid.Column="0" x:Name="SegmentsList" SelectionChanged="SegmentsList_SelectionChanged"
+                                             AutomationProperties.LabeledBy="{Binding ElementName=LblSegments}"/>
 
                                     <TextBox Grid.Row="1" Grid.Column="1" x:Name="SourceTextBox" Margin="8,0,8,0"
-                                             IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"/>
+                                             IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"
+                                             AutomationProperties.LabeledBy="{Binding ElementName=LblSource}"/>
 
                                     <TextBox Grid.Row="1" Grid.Column="2" x:Name="TtsTextBox"
-                                             VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" AcceptsReturn="True"/>
+                                             VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" AcceptsReturn="True"
+                                             AutomationProperties.LabeledBy="{Binding ElementName=LblTts}"/>
 
                                     <!-- Tag buttons -->
                                     <WrapPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,8,0,0">
@@ -245,17 +257,20 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
-                                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Lbl_DefaultModel}"/>
-                                <ComboBox Grid.Row="0" Grid.Column="1" x:Name="ModelCombo" MinWidth="260"/>
+                                <TextBlock Grid.Row="0" Grid.Column="0" x:Name="LblDefaultModel" VerticalAlignment="Center" Text="{DynamicResource Lbl_DefaultModel}"/>
+                                <ComboBox Grid.Row="0" Grid.Column="1" x:Name="ModelCombo" MinWidth="260"
+                                          AutomationProperties.LabeledBy="{Binding ElementName=LblDefaultModel}"/>
 
-                                <TextBlock Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Text="{DynamicResource Lbl_LanguageFilter}" Margin="10,0,0,0"/>
+                                <TextBlock Grid.Row="0" Grid.Column="2" x:Name="LblLanguageFilter" VerticalAlignment="Center" Text="{DynamicResource Lbl_LanguageFilter}" Margin="10,0,0,0"/>
                                 <ComboBox Grid.Row="0" Grid.Column="3" x:Name="LanguageFilterCombo" MinWidth="260"
-                                          SelectionChanged="LanguageFilterCombo_SelectionChanged"/>
+                                          SelectionChanged="LanguageFilterCombo_SelectionChanged"
+                                          AutomationProperties.LabeledBy="{Binding ElementName=LblLanguageFilter}"/>
 
-                                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Lbl_DefaultVoice}"/>
+                                <TextBlock Grid.Row="1" Grid.Column="0" x:Name="LblDefaultVoice" VerticalAlignment="Center" Text="{DynamicResource Lbl_DefaultVoice}"/>
                                 <ComboBox Grid.Row="1" Grid.Column="1" x:Name="VoiceCombo" MinWidth="260"
                                           DisplayMemberPath="DisplayName" SelectedValuePath="VoiceId"
-                                          SelectionChanged="VoiceCombo_SelectionChanged"/>
+                                          SelectionChanged="VoiceCombo_SelectionChanged"
+                                          AutomationProperties.LabeledBy="{Binding ElementName=LblDefaultVoice}"/>
 
                                 <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Text="{DynamicResource Lbl_VoiceDetails}" Margin="10,0,0,0"/>
                                 <TextBlock Grid.Row="1" Grid.Column="3" x:Name="VoiceDetailsText" TextWrapping="Wrap" />
@@ -306,16 +321,39 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
-                                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Lbl_ApiKey}"/>
-                                <PasswordBox Grid.Row="0" Grid.Column="1" x:Name="ApiKeyBox" Margin="0,0,10,0"/>
+                                <TextBlock Grid.Row="0" Grid.Column="0" x:Name="LblApiKey" VerticalAlignment="Center" Text="{DynamicResource Lbl_ApiKey}"/>
+                                <PasswordBox Grid.Row="0" Grid.Column="1" x:Name="ApiKeyBox" Margin="0,0,10,0"
+                                             AutomationProperties.LabeledBy="{Binding ElementName=LblApiKey}"/>
 
                                 <Button Grid.Row="0" Grid.Column="2" Width="120" Margin="0,0,10,0"
                                         Content="{DynamicResource Btn_SaveApiKey}" Click="SaveApiKey_Click"/>
                                 <Button Grid.Row="0" Grid.Column="3" Width="120"
                                         Content="{DynamicResource Btn_DeleteApiKey}" Click="DeleteApiKey_Click"/>
 
-                                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Lbl_Status}"/>
+                                <TextBlock Grid.Row="1" Grid.Column="0" x:Name="LblApiStatus" VerticalAlignment="Center" Text="{DynamicResource Lbl_Status}"/>
                                 <TextBlock Grid.Row="1" Grid.Column="1" x:Name="ApiKeyStatusText" VerticalAlignment="Center"/>
+                            </Grid>
+                        </GroupBox>
+
+                        <GroupBox Header="{DynamicResource Gb_Appearance}" Padding="10" Margin="0,0,0,10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="170"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" x:Name="LblTheme" VerticalAlignment="Center" Text="{DynamicResource Lbl_Theme}"/>
+                                <ComboBox Grid.Row="0" Grid.Column="1" x:Name="ThemeModeCombo" MinWidth="220"
+                                          AutomationProperties.LabeledBy="{Binding ElementName=LblTheme}"
+                                          SelectionChanged="ThemeModeCombo_SelectionChanged">
+                                    <ComboBoxItem Content="{DynamicResource Theme_System}" Tag="System"/>
+                                    <ComboBoxItem Content="{DynamicResource Theme_Light}" Tag="Light"/>
+                                    <ComboBoxItem Content="{DynamicResource Theme_Dark}" Tag="Dark"/>
+                                    <ComboBoxItem Content="{DynamicResource Theme_HighContrast}" Tag="HighContrast"/>
+                                </ComboBox>
                             </Grid>
                         </GroupBox>
 
@@ -358,26 +396,33 @@
                                 <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" x:Name="SharePointEnabledCheck"
                                           Content="{DynamicResource Chk_SharePointEnabled}"/>
 
-                                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Lbl_SharePointSiteUrl}"/>
-                                <TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,10,0" x:Name="SharePointSiteUrlBox"/>
+                                <TextBlock Grid.Row="1" Grid.Column="0" x:Name="LblSharePointSiteUrl" VerticalAlignment="Center" Text="{DynamicResource Lbl_SharePointSiteUrl}"/>
+                                <TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,10,0" x:Name="SharePointSiteUrlBox"
+                                         AutomationProperties.LabeledBy="{Binding ElementName=LblSharePointSiteUrl}"/>
 
-                                <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Text="{DynamicResource Lbl_VolumeLabelPrefix}"/>
-                                <TextBox Grid.Row="1" Grid.Column="3" x:Name="VolumeLabelPrefixBox"/>
+                                <TextBlock Grid.Row="1" Grid.Column="2" x:Name="LblVolumeLabelPrefix" VerticalAlignment="Center" Text="{DynamicResource Lbl_VolumeLabelPrefix}"/>
+                                <TextBox Grid.Row="1" Grid.Column="3" x:Name="VolumeLabelPrefixBox"
+                                         AutomationProperties.LabeledBy="{Binding ElementName=LblVolumeLabelPrefix}"/>
 
-                                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Lbl_SharePointTenantId}"/>
-                                <TextBox Grid.Row="2" Grid.Column="1" Margin="0,0,10,0" x:Name="SharePointTenantIdBox"/>
+                                <TextBlock Grid.Row="2" Grid.Column="0" x:Name="LblSharePointTenantId" VerticalAlignment="Center" Text="{DynamicResource Lbl_SharePointTenantId}"/>
+                                <TextBox Grid.Row="2" Grid.Column="1" Margin="0,0,10,0" x:Name="SharePointTenantIdBox"
+                                         AutomationProperties.LabeledBy="{Binding ElementName=LblSharePointTenantId}"/>
 
-                                <TextBlock Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Text="{DynamicResource Lbl_SequenceDigits}"/>
-                                <TextBox Grid.Row="2" Grid.Column="3" x:Name="SequenceDigitsBox"/>
+                                <TextBlock Grid.Row="2" Grid.Column="2" x:Name="LblSequenceDigits" VerticalAlignment="Center" Text="{DynamicResource Lbl_SequenceDigits}"/>
+                                <TextBox Grid.Row="2" Grid.Column="3" x:Name="SequenceDigitsBox"
+                                         AutomationProperties.LabeledBy="{Binding ElementName=LblSequenceDigits}"/>
 
-                                <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Lbl_SharePointClientId}"/>
-                                <TextBox Grid.Row="3" Grid.Column="1" Margin="0,0,10,0" x:Name="SharePointClientIdBox"/>
+                                <TextBlock Grid.Row="3" Grid.Column="0" x:Name="LblSharePointClientId" VerticalAlignment="Center" Text="{DynamicResource Lbl_SharePointClientId}"/>
+                                <TextBox Grid.Row="3" Grid.Column="1" Margin="0,0,10,0" x:Name="SharePointClientIdBox"
+                                         AutomationProperties.LabeledBy="{Binding ElementName=LblSharePointClientId}"/>
 
-                                <TextBlock Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" Text="{DynamicResource Lbl_SharePointCountersList}"/>
-                                <TextBox Grid.Row="3" Grid.Column="3" x:Name="SharePointCountersListBox"/>
+                                <TextBlock Grid.Row="3" Grid.Column="2" x:Name="LblSharePointCountersList" VerticalAlignment="Center" Text="{DynamicResource Lbl_SharePointCountersList}"/>
+                                <TextBox Grid.Row="3" Grid.Column="3" x:Name="SharePointCountersListBox"
+                                         AutomationProperties.LabeledBy="{Binding ElementName=LblSharePointCountersList}"/>
 
-                                <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Top" Margin="0,6,0,0" Text="{DynamicResource Lbl_SharePointProductionsList}"/>
-                                <TextBox Grid.Row="4" Grid.Column="1" Margin="0,6,10,0" x:Name="SharePointProductionsListBox"/>
+                                <TextBlock Grid.Row="4" Grid.Column="0" x:Name="LblSharePointProductionsList" VerticalAlignment="Top" Margin="0,6,0,0" Text="{DynamicResource Lbl_SharePointProductionsList}"/>
+                                <TextBox Grid.Row="4" Grid.Column="1" Margin="0,6,10,0" x:Name="SharePointProductionsListBox"
+                                         AutomationProperties.LabeledBy="{Binding ElementName=LblSharePointProductionsList}"/>
 
                                 <TextBlock Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,6,0,0" Opacity="0.75" TextWrapping="Wrap"
                                            Text="{DynamicResource Txt_SharePointConnectionHelp}"/>
@@ -441,9 +486,10 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
-                            <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"
+                            <TextBlock Grid.Row="0" Grid.Column="0" x:Name="LblProductionCsvFile" VerticalAlignment="Center" Margin="0,0,10,0"
                                        Text="{DynamicResource Prod_CsvFile}"/>
-                            <TextBox Grid.Row="0" Grid.Column="1" MinWidth="260" Margin="0,0,10,0" x:Name="ProductionCsvPathBox"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" MinWidth="260" Margin="0,0,10,0" x:Name="ProductionCsvPathBox"
+                                     AutomationProperties.LabeledBy="{Binding ElementName=LblProductionCsvFile}"/>
                             <Button Grid.Row="0" Grid.Column="2" Margin="0,0,10,0" MinWidth="120"
                                     Content="{DynamicResource Btn_SelectFile}" Click="Production_BrowseCsv_Click"/>
                             <Button Grid.Row="0" Grid.Column="3" MinWidth="120"
@@ -483,7 +529,8 @@
                              VerticalScrollBarVisibility="Auto"
                              HorizontalScrollBarVisibility="Auto"
                              IsReadOnly="True"
-                             TextWrapping="NoWrap"/>
+                             TextWrapping="NoWrap"
+                             AutomationProperties.Name="{DynamicResource Tab_Log}"/>
                 </DockPanel>
             </TabItem>
         </TabControl>

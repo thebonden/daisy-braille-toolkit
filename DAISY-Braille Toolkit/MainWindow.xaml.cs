@@ -21,6 +21,8 @@ namespace DAISY_Braille_Toolkit
         private readonly AppSettingsStore _settingsStore = new();
         private AppSettings _settings = new();
 
+        private bool _isApplyingThemeSelection;
+
         private List<VoiceInfo> _allVoices = new();
         private readonly MediaPlayer _player = new();
         private static readonly HttpClient _http = new();
@@ -240,12 +242,46 @@ namespace DAISY_Braille_Toolkit
             if (SequenceDigitsBox != null)
                 SequenceDigitsBox.Text = (_settings.SequenceDigits <= 0 ? 3 : _settings.SequenceDigits).ToString();
 
+            ApplyThemeSelection(_settings.ThemeMode);
+
             // Braille table settings
             LoadBrailleTablesFromSettings();
 
             SettingsSavedText.Text = "";
             PreviewStatusText.Text = "";
             SegmentsStatusText.Text = "";
+        }
+
+        private void ApplyThemeSelection(string? themeMode)
+        {
+            if (ThemeModeCombo == null)
+                return;
+
+            _isApplyingThemeSelection = true;
+            var normalized = ThemeManager.NormalizeTheme(themeMode);
+            foreach (var item in ThemeModeCombo.Items.OfType<ComboBoxItem>())
+            {
+                if (string.Equals(item.Tag as string, normalized, StringComparison.OrdinalIgnoreCase))
+                {
+                    ThemeModeCombo.SelectedItem = item;
+                    _isApplyingThemeSelection = false;
+                    return;
+                }
+            }
+
+            ThemeModeCombo.SelectedIndex = 0;
+            _isApplyingThemeSelection = false;
+        }
+
+        private void ThemeModeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_isApplyingThemeSelection)
+                return;
+
+            if (ThemeModeCombo.SelectedItem is ComboBoxItem themeItem && themeItem.Tag is string themeTag)
+                ThemeManager.ApplyTheme(themeTag);
+            else
+                ThemeManager.ApplyTheme("System");
         }
 
         private void SaveSettings_Click(object sender, RoutedEventArgs e)
@@ -269,6 +305,13 @@ namespace DAISY_Braille_Toolkit
                 _settings.SequenceDigits = 3;
 
             _settings.SelectedBrailleTableId = BrailleTableCombo.SelectedValue as string ?? "";
+
+            if (ThemeModeCombo.SelectedItem is ComboBoxItem themeItem && themeItem.Tag is string themeTag)
+                _settings.ThemeMode = themeTag;
+            else
+                _settings.ThemeMode = "System";
+
+            ThemeManager.ApplyTheme(_settings.ThemeMode);
 
             SyncBrailleTablesToSettings();
 

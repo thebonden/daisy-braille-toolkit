@@ -48,6 +48,7 @@
   <sys:String x:Key="Gb_TtsEditor">TTS Editor (separat tekstspor: Source ≠ TTS)</sys:String>
   <sys:String x:Key="Gb_VoiceSelection">Stemmevalg + Preview</sys:String>
   <sys:String x:Key="Gb_ElevenLabsApi">ElevenLabs API</sys:String>
+  <sys:String x:Key="Gb_Appearance">Udseende</sys:String>
   <sys:String x:Key="Gb_SharePointProvisioning">SharePoint opsætning</sys:String>
   <sys:String x:Key="Lbl_SharePointSetupPath">Provisioning-mappe:</sys:String>
   <sys:String x:Key="Btn_OpenSharePointSetup">Åbn mappe</sys:String>
@@ -80,6 +81,11 @@
 
   <sys:String x:Key="Lbl_ApiKey">API key:</sys:String>
   <sys:String x:Key="Lbl_Status">Status:</sys:String>
+  <sys:String x:Key="Lbl_Theme">Tema:</sys:String>
+  <sys:String x:Key="Theme_System">Følg Windows-indstilling</sys:String>
+  <sys:String x:Key="Theme_Light">Lys</sys:String>
+  <sys:String x:Key="Theme_Dark">Mørk</sys:String>
+  <sys:String x:Key="Theme_HighContrast">Høj kontrast</sys:String>
 
   <!-- Buttons -->
   <sys:String x:Key="Btn_SelectFolder">Vælg mappe</sys:String>

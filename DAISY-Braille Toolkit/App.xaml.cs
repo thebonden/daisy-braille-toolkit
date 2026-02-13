@@ -9,8 +9,11 @@ namespace DAISY_Braille_Toolkit
     {
         private void App_Startup(object sender, StartupEventArgs e)
         {
+            var store = new AppSettingsStore();
+            var settings = store.Load();
+
             // Load UI language from settings (stored in the same settings.json as other app settings)
-            var lang = LoadSavedUiLanguage();
+            var lang = NormalizeLanguage(settings.UiLanguage);
 
             // Set culture (numbers/dates) to match language. This is independent of the UI string resources.
             try
@@ -26,22 +29,8 @@ namespace DAISY_Braille_Toolkit
 
             // Apply string resources
             LanguageManager.Apply(lang);
-        }
 
-        private static string LoadSavedUiLanguage()
-        {
-            try
-            {
-                var store = new AppSettingsStore();
-                var settings = store.Load();
-
-                var lang = NormalizeLanguage(settings.UiLanguage);
-                return lang;
-            }
-            catch
-            {
-                return "en";
-            }
+            ThemeManager.ApplyTheme(settings.ThemeMode);
         }
 
         private static string NormalizeLanguage(string? lang)

@@ -5,6 +5,7 @@ namespace DAISY_Braille_Toolkit.Models
     public class AppSettings
     {
         public string UiLanguage { get; set; } = "en";
+        public string ThemeMode { get; set; } = "System";
 
         // SharePoint / Microsoft Lists (optional)
         // Provisioning scripts create the required lists. These settings tell the app where to read/write.

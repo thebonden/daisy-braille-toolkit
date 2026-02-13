@@ -48,6 +48,7 @@
   <sys:String x:Key="Gb_TtsEditor">TTS Editor (separate text track: Source ≠ TTS)</sys:String>
   <sys:String x:Key="Gb_VoiceSelection">Voice selection + Preview</sys:String>
   <sys:String x:Key="Gb_ElevenLabsApi">ElevenLabs API</sys:String>
+  <sys:String x:Key="Gb_Appearance">Appearance</sys:String>
   <sys:String x:Key="Gb_SharePointProvisioning">SharePoint setup</sys:String>
   <sys:String x:Key="Lbl_SharePointSetupPath">Provisioning folder:</sys:String>
   <sys:String x:Key="Btn_OpenSharePointSetup">Open folder</sys:String>
@@ -80,6 +81,11 @@
 
   <sys:String x:Key="Lbl_ApiKey">API key:</sys:String>
   <sys:String x:Key="Lbl_Status">Status:</sys:String>
+  <sys:String x:Key="Lbl_Theme">Theme:</sys:String>
+  <sys:String x:Key="Theme_System">Use system setting</sys:String>
+  <sys:String x:Key="Theme_Light">Light</sys:String>
+  <sys:String x:Key="Theme_Dark">Dark</sys:String>
+  <sys:String x:Key="Theme_HighContrast">High contrast</sys:String>
 
   <!-- Buttons -->
   <sys:String x:Key="Btn_SelectFolder">Select folder</sys:String>
