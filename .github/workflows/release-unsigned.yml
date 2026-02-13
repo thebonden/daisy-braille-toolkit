@@ -29,32 +29,61 @@ jobs:
       - name: Publish (win-x64, self-contained single-file)
         run: dotnet publish "./DAISY-Braille Toolkit/DAISY-Braille Toolkit.csproj" -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true -o "./dist/win-x64"
 
-      - name: Zip artifact
+      - name: Zip portable build
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path "./out" | Out-Null
           Compress-Archive -Path "./dist/win-x64/*" -DestinationPath "./out/DAISY-Braille-Toolkit-win-x64.zip" -Force
 
-      - name: Create checksums
+      - name: Install Inno Setup (for installer EXE)
         shell: pwsh
         run: |
-          $zip = "./out/DAISY-Braille-Toolkit-win-x64.zip"
-          ((Get-FileHash $zip -Algorithm SHA256).Hash.ToLower() + "  " + (Split-Path $zip -Leaf)) | Out-File -Encoding ascii "./out/DAISY-Braille-Toolkit-win-x64.zip.sha256"
-          ((Get-FileHash $zip -Algorithm SHA512).Hash.ToLower() + "  " + (Split-Path $zip -Leaf)) | Out-File -Encoding ascii "./out/DAISY-Braille-Toolkit-win-x64.zip.sha512"
+          choco install innosetup -y --no-progress
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (!(Test-Path $iscc)) { throw "ISCC not found: $iscc" }
+
+      - name: Build installer (Setup.exe)
+        shell: pwsh
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          $ver = "${{ github.ref_name }}".TrimStart('v')
+          & $iscc "Installer\DAISY-Braille-Toolkit.iss" "/DMyAppVersion=$ver"
+          if (!(Test-Path "./out/DAISY-Braille-Toolkit-Setup.exe")) {
+            throw "Expected installer not found: ./out/DAISY-Braille-Toolkit-Setup.exe"
+          }
+
+      - name: Create checksums (zip + setup)
+        shell: pwsh
+        run: |
+          $files = @(
+            "./out/DAISY-Braille-Toolkit-win-x64.zip",
+            "./out/DAISY-Braille-Toolkit-Setup.exe"
+          )
+          foreach ($f in $files) {
+            $leaf = Split-Path $f -Leaf
+            ((Get-FileHash $f -Algorithm SHA256).Hash.ToLower() + "  " + $leaf) | Out-File -Encoding ascii "$f.sha256"
+            ((Get-FileHash $f -Algorithm SHA512).Hash.ToLower() + "  " + $leaf) | Out-File -Encoding ascii "$f.sha512"
+          }
 
       - name: Upload artifact (Actions)
         uses: actions/upload-artifact@v4
         with:
           name: DAISY-Braille-Toolkit-win-x64
           path: |
-            ./out/DAISY-Braille-Toolkit-win-x64.zip
-            ./out/DAISY-Braille-Toolkit-win-x64.zip.sha256
-            ./out/DAISY-Braille-Toolkit-win-x64.zip.sha512
+            ./out/*.zip
+            ./out/*.exe
+            ./out/*.sha256
+            ./out/*.sha512
 
       - name: Generate build provenance attestation (zip)
         uses: actions/attest-build-provenance@v3
         with:
           subject-path: "./out/DAISY-Braille-Toolkit-win-x64.zip"
+
+      - name: Generate build provenance attestation (setup)
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: "./out/DAISY-Braille-Toolkit-Setup.exe"
 
       - name: Upload to GitHub Release (attach files)
         if: startsWith(github.ref, 'refs/tags/v')
@@ -65,3 +94,6 @@ jobs:
             ./out/DAISY-Braille-Toolkit-win-x64.zip
             ./out/DAISY-Braille-Toolkit-win-x64.zip.sha256
             ./out/DAISY-Braille-Toolkit-win-x64.zip.sha512
+            ./out/DAISY-Braille-Toolkit-Setup.exe
+            ./out/DAISY-Braille-Toolkit-Setup.exe.sha256
+            ./out/DAISY-Braille-Toolkit-Setup.exe.sha512
